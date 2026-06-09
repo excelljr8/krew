@@ -1,0 +1,110 @@
+export const agents = [
+  {
+    id: 'sara',
+    name: 'SARA',
+    role: { es: 'AI Sales Representative', en: 'AI Sales Representative' },
+    tagline: {
+      es: 'Prospecta, cualifica y agenda. Sin descanso.',
+      en: 'Prospects, qualifies, and books. Non-stop.',
+    },
+    description: {
+      es: 'Sara busca clientes potenciales, los contacta de forma personalizada y agenda reuniones directamente en tu calendario. Tu equipo de ventas se centra en cerrar — ella se encarga del resto.',
+      en: 'Sara finds potential clients, reaches out with personalized messages, and books meetings directly into your calendar. Your sales team focuses on closing — she handles everything else.',
+    },
+    channels: ['Email', 'LinkedIn', 'WhatsApp'],
+    metrics: [
+      { value: '500', label: { es: 'contactos/día', en: 'contacts/day' } },
+      { value: '<2 min', label: { es: 'respuesta', en: 'response' } },
+      { value: 'CRM', label: { es: 'integración', en: 'integration' } },
+    ],
+    color: '#6366F1',
+    initial: 'S',
+    setup: '1.200€',
+    monthly: { es: '450€/mes', en: '€450/mo' },
+    includes: {
+      es: ['Prospección automatizada', 'Mensajes personalizados por IA', 'Agenda en tu calendario', 'Dashboard de métricas', 'Integración CRM'],
+      en: ['Automated prospecting', 'AI-personalized messages', 'Direct calendar booking', 'Metrics dashboard', 'CRM integration'],
+    },
+  },
+  {
+    id: 'max',
+    name: 'MAX',
+    role: { es: 'AI Support Agent', en: 'AI Support Agent' },
+    tagline: {
+      es: 'Atiende a tus clientes. Siempre. En cualquier canal.',
+      en: 'Supports your customers. Always. On every channel.',
+    },
+    description: {
+      es: 'Max responde preguntas, resuelve incidencias y escala los casos complejos a tu equipo humano. Disponible 24/7 por chat, voz y WhatsApp. Cero tiempo de espera.',
+      en: 'Max answers questions, resolves issues, and escalates complex cases to your human team. Available 24/7 via chat, voice, and WhatsApp. Zero wait time.',
+    },
+    channels: ['Chat', 'Voz', 'WhatsApp', 'Email'],
+    metrics: [
+      { value: '<10s', label: { es: 'respuesta', en: 'response' } },
+      { value: '80%', label: { es: 'resolución auto', en: 'auto-resolved' } },
+      { value: '∞', label: { es: 'idiomas', en: 'languages' } },
+    ],
+    color: '#22D3EE',
+    initial: 'M',
+    setup: '900€',
+    monthly: { es: '350€/mes', en: '€350/mo' },
+    includes: {
+      es: ['Chat en tu web', 'Voz y WhatsApp', 'Escalado automático', 'Base de conocimiento', 'Soporte multiidioma'],
+      en: ['Website chat', 'Voice & WhatsApp', 'Auto escalation', 'Knowledge base', 'Multilingual support'],
+    },
+  },
+  {
+    id: 'aria',
+    name: 'ARIA',
+    role: { es: 'AI Receptionist', en: 'AI Receptionist' },
+    tagline: {
+      es: 'La primera voz de tu empresa. Perfecta. Siempre disponible.',
+      en: "Your company's first voice. Perfect. Always available.",
+    },
+    description: {
+      es: 'Aria gestiona llamadas entrantes, agenda citas, envía recordatorios y responde las preguntas más frecuentes. Ideal para clínicas, despachos y negocios con alto volumen de llamadas.',
+      en: 'Aria handles inbound calls, schedules appointments, sends reminders, and answers FAQs. Perfect for clinics, law firms, and businesses with high call volume.',
+    },
+    channels: ['Voz', 'WhatsApp', 'Email'],
+    metrics: [
+      { value: '24/7', label: { es: 'disponible', en: 'available' } },
+      { value: 'Auto', label: { es: 'confirmaciones', en: 'confirmations' } },
+      { value: 'Cal', label: { es: 'integración', en: 'integration' } },
+    ],
+    color: '#F472B6',
+    initial: 'A',
+    setup: '800€',
+    monthly: { es: '300€/mes', en: '€300/mo' },
+    includes: {
+      es: ['Atención telefónica 24/7', 'Agenda de citas', 'Recordatorios automáticos', 'FAQ por voz', 'Integración con calendario'],
+      en: ['24/7 phone answering', 'Appointment scheduling', 'Automatic reminders', 'Voice FAQ', 'Calendar integration'],
+    },
+  },
+  {
+    id: 'cole',
+    name: 'COLE',
+    role: { es: 'AI Operations Agent', en: 'AI Operations Agent' },
+    tagline: {
+      es: 'Automatiza lo repetitivo. Céntrate en lo que importa.',
+      en: 'Automate the repetitive. Focus on what matters.',
+    },
+    description: {
+      es: 'Cole gestiona tareas operativas internas — reportes, seguimiento de procesos, alertas, y flujos de trabajo. Lo que antes hacía un coordinador, Cole lo hace automáticamente.',
+      en: 'Cole handles internal operational tasks — reports, process tracking, alerts, and workflows. What used to require a coordinator, Cole does automatically.',
+    },
+    channels: ['Slack', 'Email', 'Notion', 'CRM'],
+    metrics: [
+      { value: 'Auto', label: { es: 'reportes', en: 'reports' } },
+      { value: 'Real', label: { es: 'alertas en tiempo real', en: 'real-time alerts' } },
+      { value: 'N+', label: { es: 'integraciones', en: 'integrations' } },
+    ],
+    color: '#34D399',
+    initial: 'C',
+    setup: '1.000€',
+    monthly: { es: '400€/mes', en: '€400/mo' },
+    includes: {
+      es: ['Reportes automáticos', 'Alertas configurables', 'Flujos de trabajo', 'Integraciones Slack/Notion', 'Dashboard operativo'],
+      en: ['Automatic reports', 'Configurable alerts', 'Workflow automation', 'Slack/Notion integrations', 'Operations dashboard'],
+    },
+  },
+]

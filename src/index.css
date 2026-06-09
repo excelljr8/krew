@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+@import "tailwindcss";
+
+:root {
+  --black: #080808;
+  --white: #FFFFFF;
+  --grey-400: #A1A1AA;
+  --grey-600: #52525B;
+  --grey-800: #27272A;
+  --grey-900: #18181B;
+  --indigo: #5B5BD6;
+  --indigo-light: #7B7CF7;
+  --agent-sara: #6366F1;
+  --agent-max: #22D3EE;
+  --agent-aria: #F472B6;
+  --agent-cole: #34D399;
+  --border: rgba(255, 255, 255, 0.08);
+  --surface: rgba(255, 255, 255, 0.03);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--black);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.font-display {
+  font-family: 'Syne', sans-serif;
+}
+
+/* Glass surface */
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+}
+
+/* Agent card top border accent */
+.accent-line::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent-color, var(--indigo));
+  border-radius: 16px 16px 0 0;
+}

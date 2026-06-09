@@ -1,0 +1,61 @@
+{
+  "nav": {
+    "agents": "Agents",
+    "pricing": "Pricing",
+    "book": "Book a call"
+  },
+  "hero": {
+    "title": "Your next hire isn't human.",
+    "subtitle": "Krew gives you AI agents with real roles — sales, support, reception, operations. We install them in your business in days.",
+    "cta": "Meet the team →",
+    "social_proof": "Companies across Spain already run with Krew."
+  },
+  "how": {
+    "label": "How it works",
+    "heading": "From signed to working in days.",
+    "steps": [
+      { "number": "01", "title": "Pick your agent", "desc": "Browse the catalog and choose the agent your business needs." },
+      { "number": "02", "title": "Book a call", "desc": "30 free minutes with our team to design your solution." },
+      { "number": "03", "title": "We install everything", "desc": "We configure and integrate the agent with your existing tools." },
+      { "number": "04", "title": "Your agent works", "desc": "From day one, your agent runs 24/7 without a break." }
+    ]
+  },
+  "agents": {
+    "label": "The Team",
+    "title": "The Team",
+    "subtitle": "Each agent has a clear role, a defined personality, and works 24/7 without complaints.",
+    "cta": "View profile →"
+  },
+  "pricing": {
+    "label": "Pricing",
+    "title": "Hire your agent",
+    "subtitle": "No lock-ins. No surprises. Cancel anytime.",
+    "setup": "Setup",
+    "monthly": "Monthly",
+    "includes": "Includes",
+    "hire": "Hire",
+    "note": "Setup covers full installation, configuration, and integration with your existing tools. Monthly fee includes maintenance, continuous optimization, and support.",
+    "cta": "Book a free call →",
+    "pack2": "2-agent pack",
+    "packFull": "Full Krew pack",
+    "consult": "Contact for pricing",
+    "discount15": "−15%",
+    "discount25": "−25%",
+    "bestValue": "Best value"
+  },
+  "book": {
+    "title": "Book your free call",
+    "subtitle": "30 minutes. No commitment. We'll show you exactly how Krew fits your business."
+  },
+  "footer": {
+    "tagline": "Your AI team. Running in days."
+  },
+  "agentPage": {
+    "back": "Back to the team",
+    "channels": "Channels",
+    "metrics": "Key metrics",
+    "hire": "Hire",
+    "setup": "Setup",
+    "monthly": "Monthly"
+  }
+}

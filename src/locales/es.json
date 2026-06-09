@@ -1,0 +1,61 @@
+{
+  "nav": {
+    "agents": "Agentes",
+    "pricing": "Precios",
+    "book": "Agendar llamada"
+  },
+  "hero": {
+    "title": "Tu próximo empleado no es humano.",
+    "subtitle": "Krew te da acceso a agentes de IA con roles reales — ventas, soporte, recepción, operaciones. Los instalamos en tu negocio en días.",
+    "cta": "Conoce al equipo →",
+    "social_proof": "Empresas en Madrid, Barcelona y Valencia ya tienen su Krew."
+  },
+  "how": {
+    "label": "Cómo funciona",
+    "heading": "Del contrato a trabajando en días.",
+    "steps": [
+      { "number": "01", "title": "Elige tu agente", "desc": "Explora el catálogo y elige el agente que necesita tu negocio." },
+      { "number": "02", "title": "Agenda una llamada", "desc": "30 min gratuitos con nuestro equipo para diseñar tu solución." },
+      { "number": "03", "title": "Lo instalamos", "desc": "Configuramos e integramos el agente con tus herramientas existentes." },
+      { "number": "04", "title": "Tu agente trabaja", "desc": "Desde el primer día, tu agente opera 24/7 sin descanso." }
+    ]
+  },
+  "agents": {
+    "label": "El equipo",
+    "title": "El equipo",
+    "subtitle": "Cada agente tiene un rol claro, una personalidad definida, y trabaja 24/7 sin quejarse.",
+    "cta": "Ver perfil →"
+  },
+  "pricing": {
+    "label": "Precios",
+    "title": "Contrata a tu agente",
+    "subtitle": "Sin permanencias. Sin sorpresas. Cancela cuando quieras.",
+    "setup": "Setup",
+    "monthly": "Mensual",
+    "includes": "Incluye",
+    "hire": "Contratar",
+    "note": "El setup cubre instalación, configuración e integración completa con tus herramientas. La mensualidad incluye mantenimiento, optimización continua y soporte.",
+    "cta": "Agenda una llamada gratuita →",
+    "pack2": "Pack 2 agentes",
+    "packFull": "Pack Krew completo",
+    "consult": "Consultar precio",
+    "discount15": "−15%",
+    "discount25": "−25%",
+    "bestValue": "Mejor valor"
+  },
+  "book": {
+    "title": "Agenda tu llamada gratuita",
+    "subtitle": "30 minutos. Sin compromiso. Te mostramos exactamente cómo Krew encaja en tu negocio."
+  },
+  "footer": {
+    "tagline": "Tu equipo de IA. Instalado en días."
+  },
+  "agentPage": {
+    "back": "Volver al equipo",
+    "channels": "Canales",
+    "metrics": "Métricas clave",
+    "hire": "Contratar a",
+    "setup": "Setup",
+    "monthly": "Mensual"
+  }
+}
