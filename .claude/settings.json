@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /Users/jorgeg/Desktop/Krew/krew-web && git add -A && git diff --cached --quiet || (git commit -m 'auto: checkpoint' && git push origin main)"
+          }
+        ]
+      }
+    ]
+  }
+}
