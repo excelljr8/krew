@@ -5,7 +5,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd /Users/jorgeg/Desktop/Krew/krew-web && git add -A && git diff --cached --quiet || (git commit -m 'auto: checkpoint' && git push origin main)"
+            "command": "cd /Users/alvarojr/krew && git add -A && git diff --cached --quiet || (git commit -m 'auto: sync changes to GitHub' && git push origin main)",
+            "statusMessage": "Pushing to GitHub..."
           }
         ]
       }
