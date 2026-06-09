@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import Hero from '../components/Hero'
 import HowItWorks from '../components/HowItWorks'
-import AgentCard from '../components/AgentCard'
+import AgentRow from '../components/AgentRow'
 import { agents } from '../data/agents'
 
 export default function Home() {
@@ -12,104 +12,119 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <HowItWorks />
 
-      {/* Team preview */}
+      {/* Agent list */}
       <section
-        className="py-24 px-6 lg:px-16"
-        style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
+        className="py-24"
+        style={{ borderBottom: '1px solid var(--b1)' }}
       >
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="mb-12"
-          >
-            <p className="text-xs font-medium tracking-widest uppercase mb-4" style={{ color: 'var(--grey-600)' }}>
-              {t('agents.label')}
-            </p>
-            <h2 className="font-display font-bold text-white text-4xl md:text-5xl max-w-xl">
-              {t('agents.subtitle')}
-            </h2>
-          </motion.div>
+        <div className="max-w-7xl mx-auto px-6 lg:px-14">
 
-          {/* 2-col grid on desktop */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
-            {agents.map((agent, i) => (
-              <AgentCard key={agent.id} agent={agent} index={i} />
-            ))}
+          <div className="flex items-end justify-between mb-12">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <p className="text-xs tracking-widest uppercase font-mono mb-3" style={{ color: 'var(--t4)' }}>
+                {t('agents.label')}
+              </p>
+              <h2
+                className="display font-extrabold leading-none"
+                style={{
+                  fontSize: 'clamp(32px, 4vw, 52px)',
+                  letterSpacing: '-0.03em',
+                  color: 'var(--t1)',
+                }}
+              >
+                El equipo
+              </h2>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              <Link
+                to="/agents"
+                className="text-sm transition-colors duration-150 hidden sm:block"
+                style={{ color: 'var(--t3)' }}
+                onMouseEnter={e => (e.target.style.color = 'var(--t1)')}
+                onMouseLeave={e => (e.target.style.color = 'var(--t3)')}
+              >
+                Ver todos →
+              </Link>
+            </motion.div>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="flex justify-center"
+          {/* Table header */}
+          <div
+            className="hidden sm:grid grid-cols-[224px_1fr_auto] gap-4 pb-3 mb-1 text-xs tracking-widest uppercase font-mono"
+            style={{ color: 'var(--t4)', borderBottom: '1px solid var(--b1)' }}
           >
-            <Link
-              to="/agents"
-              className="px-6 py-3 rounded-xl text-sm transition-all duration-200"
-              style={{
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                color: 'var(--grey-400)',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'
-                e.currentTarget.style.color = '#fff'
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'
-                e.currentTarget.style.color = 'var(--grey-400)'
-              }}
-            >
-              Ver el equipo completo →
-            </Link>
-          </motion.div>
+            <span>Agente</span>
+            <span>Descripción</span>
+            <span className="pr-8">Precio</span>
+          </div>
+
+          {agents.map((agent, i) => (
+            <AgentRow key={agent.id} agent={agent} index={i} />
+          ))}
         </div>
       </section>
 
-      {/* Final CTA band */}
-      <section className="py-24 px-6 lg:px-16">
-        <div className="max-w-7xl mx-auto">
+      <HowItWorks />
+
+      {/* Final CTA */}
+      <section className="py-28">
+        <div className="max-w-7xl mx-auto px-6 lg:px-14">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6 }}
+            className="rounded-2xl relative overflow-hidden"
+            style={{
+              padding: 'clamp(48px, 6vw, 80px)',
+              background: 'var(--s1)',
+              border: '1px solid var(--b1)',
+            }}
           >
             <div
-              className="rounded-3xl text-center relative overflow-hidden"
-              style={{
-                padding: '80px 48px',
-                background: 'rgba(91,91,214,0.06)',
-                border: '1px solid rgba(91,91,214,0.2)',
-              }}
-            >
-              <div
-                className="absolute inset-x-0 top-0 h-px"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(91,91,214,0.6), transparent)' }}
-              />
-              <h2 className="font-display font-bold text-white text-4xl md:text-5xl mb-6">
-                ¿Listo para tu primer agente?
+              className="absolute inset-x-0 top-0 h-px"
+              style={{ background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.5), transparent)' }}
+            />
+            <div className="max-w-xl">
+              <h2
+                className="display font-extrabold leading-none mb-5"
+                style={{
+                  fontSize: 'clamp(36px, 5vw, 60px)',
+                  letterSpacing: '-0.03em',
+                  color: 'var(--t1)',
+                }}
+              >
+                ¿Listo para tu<br />
+                <span style={{ color: 'var(--accent)' }}>primer agente?</span>
               </h2>
-              <p className="text-lg mb-10 max-w-xl mx-auto" style={{ color: 'var(--grey-400)' }}>
+              <p className="text-base mb-8" style={{ color: 'var(--t3)' }}>
                 30 minutos. Sin compromiso. Te mostramos cómo encaja Krew en tu negocio.
               </p>
               <Link
                 to="/book"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-medium text-white transition-all duration-200"
-                style={{ background: 'var(--indigo)' }}
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-white text-sm transition-all duration-200"
+                style={{ background: 'var(--accent)' }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.background = 'var(--indigo-light)'
-                  e.currentTarget.style.boxShadow = '0 0 40px rgba(91,91,214,0.4)'
+                  e.currentTarget.style.background = 'var(--accent2)'
+                  e.currentTarget.style.boxShadow = '0 0 32px rgba(99,102,241,0.45)'
+                  e.currentTarget.style.transform = 'translateY(-1px)'
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.background = 'var(--indigo)'
+                  e.currentTarget.style.background = 'var(--accent)'
                   e.currentTarget.style.boxShadow = 'none'
+                  e.currentTarget.style.transform = 'none'
                 }}
               >
                 {t('pricing.cta')}

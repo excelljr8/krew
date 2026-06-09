@@ -1,139 +1,121 @@
-import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { agents } from '../data/agents'
 
-const fade = {
-  hidden: { opacity: 0, y: 20 },
-  show: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] },
-  }),
-}
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
+})
 
 export default function Hero() {
   const { t } = useTranslation()
 
-  const title = t('hero.title')
-  const words = title.split(' ')
-  const lastWord = words[words.length - 1]
-  const firstPart = words.slice(0, -1).join(' ')
-
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-16 text-center">
-        {/* Pill badge */}
-        <motion.div variants={fade} custom={0} initial="hidden" animate="show" className="mb-8">
-          <span
-            className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-medium tracking-widest uppercase"
-            style={{
-              background: 'rgba(91,91,214,0.1)',
-              border: '1px solid rgba(91,91,214,0.3)',
-              color: 'var(--indigo-light)',
-            }}
-          >
-            AI Employees · Instalados en días
+    <section
+      className="flex flex-col justify-center min-h-screen pt-14"
+      style={{ borderBottom: '1px solid var(--b1)' }}
+    >
+      <div className="max-w-7xl mx-auto px-6 lg:px-14 w-full py-24">
+
+        <motion.div {...fadeUp(0.1)} className="flex items-center gap-3 mb-10">
+          <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--accent)' }} />
+          <span className="text-xs tracking-widest uppercase font-mono" style={{ color: 'var(--t3)' }}>
+            Krew — AI Employees
           </span>
         </motion.div>
 
-        {/* Headline */}
         <motion.h1
-          variants={fade}
-          custom={1}
-          initial="hidden"
-          animate="show"
-          className="font-display font-extrabold leading-none tracking-tight mb-6 text-6xl md:text-7xl lg:text-8xl"
+          {...fadeUp(0.2)}
+          className="display font-extrabold leading-none mb-8"
+          style={{
+            fontSize: 'clamp(52px, 8vw, 112px)',
+            letterSpacing: '-0.03em',
+            maxWidth: '14ch',
+          }}
         >
-          {firstPart}{' '}
-          <span style={{ color: 'var(--indigo)' }}>{lastWord}</span>
+          <span style={{ color: 'var(--t1)' }}>Tu próximo<br />empleado no<br /></span>
+          <span style={{ color: 'var(--accent)' }}>es humano.</span>
         </motion.h1>
 
-        {/* Subtitle */}
         <motion.p
-          variants={fade}
-          custom={2}
-          initial="hidden"
-          animate="show"
-          className="text-lg md:text-xl leading-relaxed max-w-2xl mx-auto mb-10"
-          style={{ color: 'var(--grey-400)' }}
+          {...fadeUp(0.32)}
+          className="text-lg leading-relaxed mb-12 max-w-lg"
+          style={{ color: 'var(--t3)', fontWeight: 400 }}
         >
-          {t('hero.subtitle')}
+          Agentes de IA con roles reales — ventas, soporte, recepción, operaciones.
+          Instalados en tu negocio en días.
         </motion.p>
 
-        {/* CTAs */}
-        <motion.div
-          variants={fade}
-          custom={3}
-          initial="hidden"
-          animate="show"
-          className="flex flex-col sm:flex-row gap-4 justify-center"
-        >
+        <motion.div {...fadeUp(0.42)} className="flex flex-wrap items-center gap-4">
           <Link
             to="/agents"
-            className="inline-flex items-center justify-center px-8 py-4 rounded-xl text-base font-medium text-white transition-all duration-200"
-            style={{ background: 'var(--indigo)' }}
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-white text-sm transition-all duration-200"
+            style={{ background: 'var(--accent)' }}
             onMouseEnter={e => {
-              e.currentTarget.style.background = 'var(--indigo-light)'
-              e.currentTarget.style.boxShadow = '0 0 32px rgba(91,91,214,0.45)'
+              e.currentTarget.style.background = 'var(--accent2)'
+              e.currentTarget.style.boxShadow = '0 0 28px rgba(99,102,241,0.45)'
+              e.currentTarget.style.transform = 'translateY(-1px)'
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.background = 'var(--indigo)'
+              e.currentTarget.style.background = 'var(--accent)'
               e.currentTarget.style.boxShadow = 'none'
+              e.currentTarget.style.transform = 'none'
             }}
           >
             {t('hero.cta')}
           </Link>
           <Link
-            to="/book"
-            className="inline-flex items-center justify-center px-8 py-4 rounded-xl text-base font-medium transition-all duration-200"
-            style={{
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              color: 'var(--grey-400)',
-            }}
+            to="/pricing"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-medium transition-colors duration-200"
+            style={{ color: 'var(--t3)', border: '1px solid var(--b1)' }}
             onMouseEnter={e => {
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'
-              e.currentTarget.style.color = '#fff'
+              e.currentTarget.style.color = 'var(--t1)'
+              e.currentTarget.style.borderColor = 'var(--b2)'
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'
-              e.currentTarget.style.color = 'var(--grey-400)'
+              e.currentTarget.style.color = 'var(--t3)'
+              e.currentTarget.style.borderColor = 'var(--b1)'
             }}
           >
-            {t('nav.book')}
+            Ver precios
           </Link>
         </motion.div>
 
-        {/* Social proof */}
-        <motion.p
-          variants={fade}
-          custom={4}
-          initial="hidden"
-          animate="show"
-          className="mt-10 text-sm"
-          style={{ color: 'var(--grey-600)' }}
-        >
-          {t('hero.social_proof')}
-        </motion.p>
-      </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.4 }}
-      >
-        <span className="text-xs tracking-widest uppercase" style={{ color: 'var(--grey-800)' }}>
-          Scroll
-        </span>
         <motion.div
-          className="w-px h-8"
-          style={{ background: 'linear-gradient(to bottom, var(--grey-800), transparent)' }}
-          animate={{ scaleY: [1, 0.4, 1], opacity: [0.4, 1, 0.4] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        />
-      </motion.div>
+          {...fadeUp(0.55)}
+          className="flex flex-wrap items-center gap-3 mt-20"
+        >
+          <span className="text-xs font-mono tracking-widest uppercase mr-2" style={{ color: 'var(--t4)' }}>
+            El equipo
+          </span>
+          {agents.map((a) => (
+            <Link
+              key={a.id}
+              to={`/agents/${a.id}`}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-150"
+              style={{
+                background: `rgba(${a.colorRgb}, 0.08)`,
+                border: `1px solid rgba(${a.colorRgb}, 0.2)`,
+                color: a.color,
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = `rgba(${a.colorRgb}, 0.16)`
+                e.currentTarget.style.borderColor = `rgba(${a.colorRgb}, 0.4)`
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = `rgba(${a.colorRgb}, 0.08)`
+                e.currentTarget.style.borderColor = `rgba(${a.colorRgb}, 0.2)`
+              }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full" style={{ background: a.color }} />
+              {a.name}
+            </Link>
+          ))}
+        </motion.div>
+
+      </div>
     </section>
   )
 }

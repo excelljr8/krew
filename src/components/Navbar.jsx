@@ -2,111 +2,117 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { KrewLogo } from './ui/krew-logo'
 
 export default function Navbar() {
   const { t, i18n } = useTranslation()
-  const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const location = useLocation()
+  const [solid, setSolid] = useState(false)
+  const [open, setOpen] = useState(false)
+  const { pathname } = useLocation()
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
+    const fn = () => setSolid(window.scrollY > 24)
+    window.addEventListener('scroll', fn, { passive: true })
+    return () => window.removeEventListener('scroll', fn)
   }, [])
+  useEffect(() => setOpen(false), [pathname])
 
-  useEffect(() => setMenuOpen(false), [location])
-
-  const toggleLang = () =>
-    i18n.changeLanguage(i18n.language === 'es' ? 'en' : 'es')
+  const lang = i18n.language === 'es' ? 'EN' : 'ES'
 
   return (
     <motion.header
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-      style={{
-        background: scrolled ? 'rgba(8,8,8,0.85)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(12px)' : 'none',
-        borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : 'none',
-      }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+      className="fixed inset-x-0 top-0 z-50 transition-all duration-300"
+      style={solid ? {
+        background: 'rgba(5,5,5,0.85)',
+        backdropFilter: 'blur(16px)',
+        borderBottom: '1px solid var(--b1)',
+      } : {}}
     >
-      {/* Desktop nav — 3-column grid so links stay truly centered */}
-      <nav className="hidden md:grid grid-cols-3 items-center h-16 max-w-7xl mx-auto px-6 lg:px-16">
-        {/* Left — logo */}
-        <div className="flex items-center">
-          <Link to="/"><KrewLogo size={24} /></Link>
-        </div>
+      {/* Desktop */}
+      <div className="hidden md:grid grid-cols-3 items-center h-14 max-w-7xl mx-auto px-6 lg:px-14">
+        <Link to="/" className="flex items-center gap-2.5">
+          <span className="display font-extrabold text-lg tracking-tight" style={{ color: 'var(--t1)' }}>KREW</span>
+          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent)' }} />
+        </Link>
 
-        {/* Center — page links */}
-        <div className="flex items-center justify-center gap-8">
-          <NavLink to="/agents">{t('nav.agents')}</NavLink>
-          <NavLink to="/pricing">{t('nav.pricing')}</NavLink>
-        </div>
+        <nav className="flex items-center justify-center gap-8">
+          {[['Agentes', '/agents'], ['Precios', '/pricing']].map(([label, to]) => (
+            <Link
+              key={to} to={to}
+              className="text-sm transition-colors duration-150"
+              style={{ color: pathname === to ? 'var(--t1)' : 'var(--t3)' }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--t1)')}
+              onMouseLeave={e => (e.currentTarget.style.color = pathname === to ? 'var(--t1)' : 'var(--t3)')}
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
 
-        {/* Right — lang + CTA */}
-        <div className="flex items-center justify-end gap-4">
+        <div className="flex items-center justify-end gap-5">
           <button
-            onClick={toggleLang}
-            className="text-xs font-medium tracking-widest cursor-pointer transition-colors duration-200"
-            style={{ color: 'var(--grey-400)' }}
-            onMouseEnter={e => (e.target.style.color = '#fff')}
-            onMouseLeave={e => (e.target.style.color = 'var(--grey-400)')}
+            onClick={() => i18n.changeLanguage(i18n.language === 'es' ? 'en' : 'es')}
+            className="text-xs font-mono tracking-widest transition-colors cursor-pointer"
+            style={{ color: 'var(--t4)' }}
+            onMouseEnter={e => (e.target.style.color = 'var(--t2)')}
+            onMouseLeave={e => (e.target.style.color = 'var(--t4)')}
           >
-            {i18n.language === 'es' ? 'EN' : 'ES'}
+            {lang}
           </button>
           <Link
             to="/book"
-            className="px-4 py-2 rounded-lg text-sm font-medium text-white transition-all duration-200"
-            style={{ background: 'var(--indigo)' }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'var(--indigo-light)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'var(--indigo)')}
+            className="text-sm font-medium text-white px-4 py-2 rounded-lg transition-all duration-150"
+            style={{ background: 'var(--accent)' }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'var(--accent2)'
+              e.currentTarget.style.boxShadow = '0 0 24px rgba(99,102,241,0.4)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'var(--accent)'
+              e.currentTarget.style.boxShadow = 'none'
+            }}
           >
             {t('nav.book')}
           </Link>
         </div>
-      </nav>
+      </div>
 
-      {/* Mobile nav */}
-      <nav className="flex md:hidden items-center justify-between h-16 px-6">
-        <Link to="/"><KrewLogo size={22} /></Link>
-        <div className="flex items-center gap-4">
-          <button
-            onClick={toggleLang}
-            className="text-xs font-medium tracking-widest cursor-pointer"
-            style={{ color: 'var(--grey-400)' }}
-          >
-            {i18n.language === 'es' ? 'EN' : 'ES'}
-          </button>
-          <button onClick={() => setMenuOpen(!menuOpen)} className="p-1">
-            <div className="w-5 flex flex-col gap-1.5">
-              <span className={`block h-px bg-white transition-all duration-300 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-              <span className={`block h-px bg-white transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
-              <span className={`block h-px bg-white transition-all duration-300 ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
-            </div>
-          </button>
-        </div>
-      </nav>
+      {/* Mobile */}
+      <div className="flex md:hidden items-center justify-between h-14 px-5">
+        <Link to="/" className="flex items-center gap-2">
+          <span className="display font-extrabold text-base" style={{ color: 'var(--t1)' }}>KREW</span>
+          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent)' }} />
+        </Link>
+        <button
+          onClick={() => setOpen(!open)}
+          className="flex flex-col gap-1.5 p-1"
+          aria-label="Menu"
+        >
+          <span className={`block w-5 h-px bg-white/70 transition-all duration-200 ${open ? 'rotate-45 translate-y-[7px]' : ''}`} />
+          <span className={`block w-5 h-px bg-white/70 transition-all duration-200 ${open ? 'opacity-0' : ''}`} />
+          <span className={`block w-5 h-px bg-white/70 transition-all duration-200 ${open ? '-rotate-45 -translate-y-[7px]' : ''}`} />
+        </button>
+      </div>
 
       <AnimatePresence>
-        {menuOpen && (
+        {open && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="md:hidden overflow-hidden"
-            style={{ background: 'rgba(8,8,8,0.95)', borderTop: '1px solid rgba(255,255,255,0.06)' }}
+            style={{ background: 'rgba(5,5,5,0.97)', borderTop: '1px solid var(--b1)' }}
           >
-            <div className="px-6 py-5 flex flex-col gap-4">
-              <Link to="/agents" className="text-sm" style={{ color: 'var(--grey-400)' }}>{t('nav.agents')}</Link>
-              <Link to="/pricing" className="text-sm" style={{ color: 'var(--grey-400)' }}>{t('nav.pricing')}</Link>
+            <div className="px-5 py-5 flex flex-col gap-4">
+              <Link to="/agents" className="text-sm" style={{ color: 'var(--t2)' }}>Agentes</Link>
+              <Link to="/pricing" className="text-sm" style={{ color: 'var(--t2)' }}>Precios</Link>
               <Link
                 to="/book"
-                className="px-4 py-2.5 rounded-lg text-sm font-medium text-white text-center"
-                style={{ background: 'var(--indigo)' }}
+                className="text-sm font-medium text-white text-center py-3 rounded-lg"
+                style={{ background: 'var(--accent)' }}
               >
                 {t('nav.book')}
               </Link>
@@ -115,21 +121,5 @@ export default function Navbar() {
         )}
       </AnimatePresence>
     </motion.header>
-  )
-}
-
-function NavLink({ to, children }) {
-  const { pathname } = useLocation()
-  const active = pathname === to
-  return (
-    <Link
-      to={to}
-      className="text-sm transition-colors duration-200"
-      style={{ color: active ? '#fff' : 'var(--grey-400)' }}
-      onMouseEnter={e => { if (!active) e.target.style.color = '#fff' }}
-      onMouseLeave={e => { if (!active) e.target.style.color = 'var(--grey-400)' }}
-    >
-      {children}
-    </Link>
   )
 }

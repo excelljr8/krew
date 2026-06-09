@@ -1,67 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 
 :root {
-  --black: #080808;
-  --white: #FFFFFF;
-  --grey-400: #A1A1AA;
-  --grey-600: #52525B;
-  --grey-800: #27272A;
-  --grey-900: #18181B;
-  --indigo: #5B5BD6;
-  --indigo-light: #7B7CF7;
-  --agent-sara: #6366F1;
-  --agent-max: #22D3EE;
-  --agent-aria: #F472B6;
-  --agent-cole: #34D399;
-  --border: rgba(255, 255, 255, 0.08);
-  --surface: rgba(255, 255, 255, 0.03);
+  --bg:       #050505;
+  --bg-2:     #0d0d0d;
+  --t1:       #F4F4F5;
+  --t2:       #A1A1AA;
+  --t3:       #52525B;
+  --t4:       #3F3F46;
+  --s1:       rgba(255,255,255,0.04);
+  --s2:       rgba(255,255,255,0.07);
+  --b1:       rgba(255,255,255,0.07);
+  --b2:       rgba(255,255,255,0.14);
+  --accent:   #6366F1;
+  --accent2:  #818CF8;
+  --sara:     #6366F1; --sara-rgb: 99,102,241;
+  --max:      #22D3EE; --max-rgb:  34,211,238;
+  --aria:     #F472B6; --aria-rgb: 244,114,182;
+  --cole:     #34D399; --cole-rgb: 52,211,153;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 body {
-  background-color: var(--black);
-  color: var(--white);
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 400;
+  background: var(--bg);
+  color: var(--t1);
+  font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
-
-#root {
-  width: 100%;
-  min-height: 100vh;
-}
-
-.font-display {
-  font-family: 'Syne', sans-serif;
-}
-
-/* Glass surface */
-.glass {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  backdrop-filter: blur(12px);
-}
-
-/* Agent card top border accent */
-.accent-line::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--accent-color, var(--indigo));
-  border-radius: 16px 16px 0 0;
-}
+#root { min-height: 100vh; }
+.display { font-family: 'Syne', sans-serif; }
+.rule { border-top: 1px solid var(--b1); }

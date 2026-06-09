@@ -8,95 +8,111 @@ export default function AgentCard({ agent, index = 0 }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ y: -4 }}
+      transition={{ duration: 0.55, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
+      className="h-full"
     >
       <Link to={`/agents/${agent.id}`} className="block h-full group">
         <div
-          className="h-full flex flex-col relative overflow-hidden transition-all duration-200"
+          className="h-full flex flex-col overflow-hidden transition-all duration-300 rounded-2xl"
           style={{
             background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            borderRadius: '16px',
-            padding: '32px',
+            border: `1px solid rgba(${agent.colorRgb}, 0.2)`,
           }}
           onMouseEnter={e => {
-            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)'
-            e.currentTarget.style.boxShadow = `0 0 40px rgba(0,0,0,0.5)`
+            e.currentTarget.style.borderColor = `rgba(${agent.colorRgb}, 0.5)`
+            e.currentTarget.style.transform = 'translateY(-4px)'
+            e.currentTarget.style.boxShadow = `0 24px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(${agent.colorRgb}, 0.15)`
           }}
           onMouseLeave={e => {
-            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'
+            e.currentTarget.style.borderColor = `rgba(${agent.colorRgb}, 0.2)`
+            e.currentTarget.style.transform = 'none'
             e.currentTarget.style.boxShadow = 'none'
           }}
         >
-          {/* Top accent line */}
+          {/* Colored header */}
           <div
-            className="absolute top-0 left-0 right-0 h-0.5"
-            style={{ background: agent.color, borderRadius: '16px 16px 0 0' }}
-          />
-
-          {/* Avatar */}
-          <div
-            className="w-10 h-10 rounded-full flex items-center justify-center font-display font-bold text-base mb-5 flex-shrink-0"
+            className="relative flex items-end px-7 pt-7 pb-5 overflow-hidden"
             style={{
-              background: `${agent.color}20`,
-              color: agent.color,
+              background: `linear-gradient(135deg, rgba(${agent.colorRgb}, 0.18) 0%, rgba(${agent.colorRgb}, 0.06) 100%)`,
+              borderBottom: `1px solid rgba(${agent.colorRgb}, 0.15)`,
             }}
           >
-            {agent.initial}
-          </div>
-
-          {/* Name + status */}
-          <div className="flex items-center gap-2 mb-1">
+            {/* Big decorative initial */}
             <span
-              className="font-display font-extrabold"
-              style={{ fontSize: '28px', color: agent.color, lineHeight: 1 }}
+              className="absolute right-4 top-1 font-display font-extrabold select-none pointer-events-none"
+              style={{
+                fontSize: '80px',
+                lineHeight: 1,
+                color: agent.color,
+                opacity: 0.12,
+              }}
             >
-              {agent.name}
+              {agent.initial}
             </span>
-            <span
-              className="w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0"
-              style={{ background: agent.color }}
-            />
-          </div>
 
-          {/* Role */}
-          <p className="text-xs font-medium uppercase tracking-widest mb-4" style={{ color: 'var(--grey-600)' }}>
-            {agent.role[lang]}
-          </p>
-
-          {/* Tagline */}
-          <p className="text-sm leading-relaxed flex-1 mb-6" style={{ color: 'var(--grey-400)' }}>
-            {agent.tagline[lang]}
-          </p>
-
-          {/* Channels */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            {agent.channels.map((ch) => (
-              <span
-                key={ch}
-                className="text-xs px-2.5 py-1 rounded-full font-medium"
-                style={{
-                  background: `${agent.color}12`,
-                  border: `1px solid ${agent.color}28`,
-                  color: agent.color,
-                }}
+            {/* Avatar + name */}
+            <div className="relative z-10 flex items-center gap-3">
+              <div
+                className="w-11 h-11 rounded-xl flex items-center justify-center font-display font-bold text-lg flex-shrink-0"
+                style={{ background: `rgba(${agent.colorRgb}, 0.2)`, color: agent.color }}
               >
-                {ch}
-              </span>
-            ))}
+                {agent.initial}
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span
+                    className="font-display font-extrabold text-2xl leading-none"
+                    style={{ color: agent.color }}
+                  >
+                    {agent.name}
+                  </span>
+                  <span
+                    className="w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0"
+                    style={{ background: agent.color }}
+                  />
+                </div>
+                <p className="text-xs font-medium uppercase tracking-widest mt-0.5" style={{ color: 'var(--grey-600)' }}>
+                  {agent.role[lang]}
+                </p>
+              </div>
+            </div>
           </div>
 
-          {/* CTA */}
-          <span
-            className="text-sm font-medium flex items-center gap-1 transition-all duration-200 group-hover:gap-2"
-            style={{ color: agent.color }}
-          >
-            {t('agents.cta')}
-          </span>
+          {/* Body */}
+          <div className="flex flex-col flex-1 p-7">
+            {/* Tagline */}
+            <p className="text-[15px] leading-relaxed mb-5 flex-1" style={{ color: 'var(--grey-400)' }}>
+              {agent.tagline[lang]}
+            </p>
+
+            {/* Channels */}
+            <div className="flex flex-wrap gap-1.5 mb-6">
+              {agent.channels.map((ch) => (
+                <span
+                  key={ch}
+                  className="text-xs px-2.5 py-1 rounded-full font-medium"
+                  style={{
+                    background: `rgba(${agent.colorRgb}, 0.1)`,
+                    border: `1px solid rgba(${agent.colorRgb}, 0.22)`,
+                    color: agent.color,
+                  }}
+                >
+                  {ch}
+                </span>
+              ))}
+            </div>
+
+            {/* CTA */}
+            <div
+              className="flex items-center gap-1.5 text-sm font-semibold transition-all duration-200 group-hover:gap-3"
+              style={{ color: agent.color }}
+            >
+              {t('agents.cta')}
+            </div>
+          </div>
         </div>
       </Link>
     </motion.div>

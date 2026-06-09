@@ -16,21 +16,29 @@ export default function BookCall() {
   }, [])
 
   return (
-    <div className="min-h-screen px-6" style={{ paddingTop: '120px', paddingBottom: '120px' }}>
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen pt-28 pb-32">
+      <div className="max-w-2xl mx-auto px-6">
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-12"
+          className="mb-12"
         >
-          <p className="text-xs font-medium tracking-widest uppercase mb-4" style={{ color: 'var(--grey-600)' }}>
+          <p className="text-xs tracking-widest uppercase font-mono mb-4" style={{ color: 'var(--t4)' }}>
             Krew
           </p>
-          <h1 className="font-display font-extrabold text-white mb-4" style={{ fontSize: 'clamp(36px, 5vw, 52px)' }}>
+          <h1
+            className="display font-extrabold leading-none mb-4"
+            style={{
+              fontSize: 'clamp(36px, 5vw, 56px)',
+              letterSpacing: '-0.03em',
+              color: 'var(--t1)',
+            }}
+          >
             {t('book.title')}
           </h1>
-          <p className="text-lg" style={{ color: 'var(--grey-400)' }}>
+          <p className="text-base" style={{ color: 'var(--t3)' }}>
             {t('book.subtitle')}
           </p>
         </motion.div>
@@ -40,7 +48,7 @@ export default function BookCall() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
           className="rounded-2xl overflow-hidden"
-          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
+          style={{ background: 'var(--s1)', border: '1px solid var(--b1)' }}
         >
           <div
             className="calendly-inline-widget w-full"
@@ -48,6 +56,7 @@ export default function BookCall() {
             style={{ minHeight: '700px' }}
           />
         </motion.div>
+
       </div>
     </div>
   )
