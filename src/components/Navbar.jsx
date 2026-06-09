@@ -10,7 +10,8 @@ export default function Navbar() {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    const fn = () => setSolid(window.scrollY > 24)
+    const fn = () => setSolid(window.scrollY > 16)
+    fn()
     window.addEventListener('scroll', fn, { passive: true })
     return () => window.removeEventListener('scroll', fn)
   }, [])
@@ -20,33 +21,56 @@ export default function Navbar() {
 
   return (
     <motion.header
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
+      initial={{ opacity: 0, y: -8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className="fixed inset-x-0 top-0 z-50 transition-all duration-300"
       style={solid ? {
-        background: 'rgba(5,5,5,0.85)',
-        backdropFilter: 'blur(16px)',
+        background: 'rgba(3,7,18,0.88)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
         borderBottom: '1px solid var(--b1)',
-      } : {}}
+      } : {
+        background: 'rgba(3,7,18,0.4)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+      }}
     >
       {/* Desktop */}
-      <div className="hidden md:grid grid-cols-3 items-center h-14 max-w-7xl mx-auto px-6 lg:px-14">
+      <div className="hidden md:grid grid-cols-3 items-center h-16 max-w-7xl mx-auto px-6 lg:px-14">
         <Link to="/" className="flex items-center gap-2.5">
-          <span className="display font-extrabold text-lg tracking-tight" style={{ color: 'var(--t1)' }}>KREW</span>
-          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent)' }} />
+          <span
+            className="display font-extrabold text-lg tracking-tight"
+            style={{ color: 'var(--t1)', letterSpacing: '-0.02em' }}
+          >
+            KREW
+          </span>
+          <span
+            className="w-2 h-2 rounded-full flex-shrink-0"
+            style={{
+              background: 'linear-gradient(135deg, #6366F1, #22D3EE)',
+              boxShadow: '0 0 8px rgba(99,102,241,0.6)',
+            }}
+          />
         </Link>
 
         <nav className="flex items-center justify-center gap-8">
           {[['Agentes', '/agents'], ['Precios', '/pricing']].map(([label, to]) => (
             <Link
-              key={to} to={to}
-              className="text-sm transition-colors duration-150"
+              key={to}
+              to={to}
+              className="text-sm transition-all duration-150 relative"
               style={{ color: pathname === to ? 'var(--t1)' : 'var(--t3)' }}
               onMouseEnter={e => (e.currentTarget.style.color = 'var(--t1)')}
               onMouseLeave={e => (e.currentTarget.style.color = pathname === to ? 'var(--t1)' : 'var(--t3)')}
             >
               {label}
+              {pathname === to && (
+                <span
+                  className="absolute -bottom-1 left-0 right-0 h-px"
+                  style={{ background: 'var(--accent)' }}
+                />
+              )}
             </Link>
           ))}
         </nav>
@@ -54,7 +78,7 @@ export default function Navbar() {
         <div className="flex items-center justify-end gap-5">
           <button
             onClick={() => i18n.changeLanguage(i18n.language === 'es' ? 'en' : 'es')}
-            className="text-xs font-mono tracking-widest transition-colors cursor-pointer"
+            className="text-xs font-mono tracking-widest cursor-pointer transition-colors duration-150"
             style={{ color: 'var(--t4)' }}
             onMouseEnter={e => (e.target.style.color = 'var(--t2)')}
             onMouseLeave={e => (e.target.style.color = 'var(--t4)')}
@@ -63,15 +87,18 @@ export default function Navbar() {
           </button>
           <Link
             to="/book"
-            className="text-sm font-medium text-white px-4 py-2 rounded-lg transition-all duration-150"
-            style={{ background: 'var(--accent)' }}
+            className="text-sm font-semibold text-white px-4 py-2 rounded-lg transition-all duration-150"
+            style={{
+              background: 'linear-gradient(135deg, #6366F1 0%, #7C3AED 100%)',
+              boxShadow: '0 0 16px rgba(99,102,241,0.3)',
+            }}
             onMouseEnter={e => {
-              e.currentTarget.style.background = 'var(--accent2)'
-              e.currentTarget.style.boxShadow = '0 0 24px rgba(99,102,241,0.4)'
+              e.currentTarget.style.boxShadow = '0 0 24px rgba(99,102,241,0.5)'
+              e.currentTarget.style.transform = 'translateY(-1px)'
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.background = 'var(--accent)'
-              e.currentTarget.style.boxShadow = 'none'
+              e.currentTarget.style.boxShadow = '0 0 16px rgba(99,102,241,0.3)'
+              e.currentTarget.style.transform = 'none'
             }}
           >
             {t('nav.book')}
@@ -80,10 +107,13 @@ export default function Navbar() {
       </div>
 
       {/* Mobile */}
-      <div className="flex md:hidden items-center justify-between h-14 px-5">
+      <div className="flex md:hidden items-center justify-between h-16 px-5">
         <Link to="/" className="flex items-center gap-2">
           <span className="display font-extrabold text-base" style={{ color: 'var(--t1)' }}>KREW</span>
-          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent)' }} />
+          <span
+            className="w-1.5 h-1.5 rounded-full"
+            style={{ background: 'linear-gradient(135deg, #6366F1, #22D3EE)' }}
+          />
         </Link>
         <button
           onClick={() => setOpen(!open)}
@@ -102,17 +132,17 @@ export default function Navbar() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.22 }}
             className="md:hidden overflow-hidden"
-            style={{ background: 'rgba(5,5,5,0.97)', borderTop: '1px solid var(--b1)' }}
+            style={{ background: 'rgba(3,7,18,0.97)', borderTop: '1px solid var(--b1)' }}
           >
-            <div className="px-5 py-5 flex flex-col gap-4">
+            <div className="px-5 py-6 flex flex-col gap-5">
               <Link to="/agents" className="text-sm" style={{ color: 'var(--t2)' }}>Agentes</Link>
               <Link to="/pricing" className="text-sm" style={{ color: 'var(--t2)' }}>Precios</Link>
               <Link
                 to="/book"
-                className="text-sm font-medium text-white text-center py-3 rounded-lg"
-                style={{ background: 'var(--accent)' }}
+                className="text-sm font-semibold text-white text-center py-3 rounded-lg"
+                style={{ background: 'linear-gradient(135deg, #6366F1 0%, #7C3AED 100%)' }}
               >
                 {t('nav.book')}
               </Link>

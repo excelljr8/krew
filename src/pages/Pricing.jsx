@@ -8,187 +8,199 @@ export default function Pricing() {
   const lang = i18n.language === 'en' ? 'en' : 'es'
 
   return (
-    <div className="min-h-screen pt-28 pb-32">
-      <div className="max-w-7xl mx-auto px-6 lg:px-14">
+    <div style={{ minHeight: '100vh', paddingTop: '112px', paddingBottom: '128px', position: 'relative' }}>
+      {/* Background glow */}
+      <div style={{
+        position: 'absolute', width: '700px', height: '700px', borderRadius: '50%', pointerEvents: 'none',
+        background: 'radial-gradient(circle, rgba(99,102,241,0.07) 0%, transparent 65%)',
+        top: '-150px', right: '-200px',
+      }} aria-hidden="true" />
 
+      <div className="max-w-7xl mx-auto px-6 lg:px-14" style={{ position: 'relative', zIndex: 1 }}>
+
+        {/* Page header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-16"
+          style={{ marginBottom: '72px' }}
         >
-          <p className="text-xs tracking-widest uppercase font-mono mb-4" style={{ color: 'var(--t4)' }}>
+          <p style={{ fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'monospace', color: '#475569', marginBottom: '16px' }}>
             {t('pricing.label')}
           </p>
-          <h1
-            className="display font-extrabold leading-none mb-4"
-            style={{
-              fontSize: 'clamp(40px, 6vw, 72px)',
-              letterSpacing: '-0.03em',
-              color: 'var(--t1)',
-            }}
-          >
+          <h1 className="display font-extrabold" style={{
+            fontSize: 'clamp(40px, 6vw, 72px)',
+            letterSpacing: '-0.03em', lineHeight: 1,
+            color: '#F1F5F9', marginBottom: '16px',
+          }}>
             {t('pricing.title')}
           </h1>
-          <p className="text-base max-w-lg" style={{ color: 'var(--t3)' }}>
+          <p style={{ fontSize: '16px', maxWidth: '500px', color: '#64748B', lineHeight: '1.6' }}>
             {t('pricing.subtitle')}
           </p>
         </motion.div>
 
-        {/* Agent pricing cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+        {/* Agent cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5" style={{ marginBottom: '20px' }}>
           {agents.map((agent, i) => (
             <motion.div
               key={agent.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, delay: i * 0.08 }}
-              className="rounded-2xl relative overflow-hidden transition-all duration-200 flex flex-col"
               style={{
-                padding: '28px 32px',
-                background: 'var(--s1)',
-                border: `1px solid rgba(${agent.colorRgb}, 0.15)`,
+                background: '#0f172a',
+                border: `1px solid rgba(${agent.colorRgb}, 0.18)`,
+                borderRadius: '16px', overflow: 'hidden',
+                display: 'flex', flexDirection: 'column',
+                transition: 'border-color 0.2s',
               }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = `rgba(${agent.colorRgb}, 0.35)`)}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = `rgba(${agent.colorRgb}, 0.15)`)}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = `rgba(${agent.colorRgb}, 0.4)`)}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = `rgba(${agent.colorRgb}, 0.18)`)}
             >
-              <div className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl" style={{ background: agent.color }} />
+              {/* Colored top strip */}
+              <div style={{ height: '3px', background: `linear-gradient(90deg, ${agent.color}, rgba(${agent.colorRgb}, 0.15))` }} />
 
-              <div className="flex items-start justify-between mb-7">
-                <div>
-                  <h2
-                    className="display font-extrabold text-2xl mb-1"
-                    style={{ color: agent.color }}
-                  >
-                    {agent.name}
-                  </h2>
-                  <p className="text-xs uppercase tracking-widest font-mono" style={{ color: 'var(--t4)' }}>
-                    {agent.role[lang]}
-                  </p>
+              <div style={{ padding: '28px 32px 32px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                {/* Agent header */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '28px' }}>
+                  <div>
+                    <h2 className="display font-extrabold" style={{ fontSize: '24px', color: agent.color, marginBottom: '4px' }}>
+                      {agent.name}
+                    </h2>
+                    <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: 'monospace', color: '#475569' }}>
+                      {agent.role[lang]}
+                    </p>
+                  </div>
+                  <div style={{
+                    width: '44px', height: '44px', borderRadius: '12px', flexShrink: 0,
+                    background: `rgba(${agent.colorRgb}, 0.12)`,
+                    border: `1px solid rgba(${agent.colorRgb}, 0.25)`,
+                    color: agent.color, fontFamily: 'Syne, sans-serif',
+                    fontWeight: 800, fontSize: '18px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    {agent.initial}
+                  </div>
                 </div>
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm flex-shrink-0"
+
+                {/* Pricing block */}
+                <div style={{
+                  display: 'flex', borderRadius: '12px', overflow: 'hidden',
+                  border: `1px solid rgba(${agent.colorRgb}, 0.15)`,
+                  marginBottom: '28px',
+                }}>
+                  <div style={{ flex: 1, padding: '16px 20px', background: `rgba(${agent.colorRgb}, 0.04)` }}>
+                    <p style={{ fontSize: '11px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#475569', marginBottom: '6px' }}>
+                      {t('pricing.setup')}
+                    </p>
+                    <p className="display font-bold" style={{ fontSize: '22px', color: '#F1F5F9' }}>{agent.setup}</p>
+                  </div>
+                  <div style={{ width: '1px', background: `rgba(${agent.colorRgb}, 0.15)` }} />
+                  <div style={{ flex: 1, padding: '16px 20px', background: `rgba(${agent.colorRgb}, 0.04)` }}>
+                    <p style={{ fontSize: '11px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#475569', marginBottom: '6px' }}>
+                      {t('pricing.monthly')}
+                    </p>
+                    <p className="display font-extrabold" style={{ fontSize: '26px', color: agent.color, lineHeight: 1 }}>
+                      {agent.monthly[lang]}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Features */}
+                <ul style={{ flex: 1, marginBottom: '28px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {agent.includes[lang].map((item) => (
+                    <li key={item} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#94A3B8' }}>
+                      <span style={{
+                        width: '18px', height: '18px', borderRadius: '50%', flexShrink: 0,
+                        background: `rgba(${agent.colorRgb}, 0.12)`,
+                        border: `1px solid rgba(${agent.colorRgb}, 0.25)`,
+                        color: agent.color, fontSize: '10px', fontWeight: 700,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        ✓
+                      </span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  to="/book"
                   style={{
-                    background: `rgba(${agent.colorRgb}, 0.1)`,
-                    color: agent.color,
-                    fontFamily: 'Syne, sans-serif',
+                    display: 'inline-flex', alignItems: 'center', gap: '8px',
+                    padding: '12px 20px', borderRadius: '10px',
+                    background: agent.color, color: '#fff',
+                    fontWeight: 600, fontSize: '14px',
+                    textDecoration: 'none', alignSelf: 'flex-start',
+                    transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.filter = 'brightness(1.12)'
+                    e.currentTarget.style.boxShadow = `0 0 24px rgba(${agent.colorRgb}, 0.5)`
+                    e.currentTarget.style.transform = 'translateY(-1px)'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.filter = 'none'
+                    e.currentTarget.style.boxShadow = 'none'
+                    e.currentTarget.style.transform = 'none'
                   }}
                 >
-                  {agent.initial}
-                </div>
+                  {t('pricing.hire')} {agent.name} →
+                </Link>
               </div>
-
-              <div className="flex items-end gap-8 mb-7">
-                <div>
-                  <p className="text-xs mb-1.5 font-mono uppercase tracking-widest" style={{ color: 'var(--t4)' }}>
-                    {t('pricing.setup')}
-                  </p>
-                  <p className="display font-bold text-xl" style={{ color: 'var(--t1)' }}>{agent.setup}</p>
-                </div>
-                <div className="w-px self-stretch" style={{ background: 'var(--b1)' }} />
-                <div>
-                  <p className="text-xs mb-1.5 font-mono uppercase tracking-widest" style={{ color: 'var(--t4)' }}>
-                    {t('pricing.monthly')}
-                  </p>
-                  <p
-                    className="display font-extrabold"
-                    style={{ fontSize: '34px', lineHeight: 1, color: agent.color }}
-                  >
-                    {agent.monthly[lang]}
-                  </p>
-                </div>
-              </div>
-
-              <ul className="space-y-2 mb-8 flex-1">
-                {agent.includes[lang].map((item) => (
-                  <li key={item} className="flex items-center gap-2.5 text-sm" style={{ color: 'var(--t3)' }}>
-                    <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: agent.color }} />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
-              <Link
-                to="/book"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white transition-all duration-200 self-start"
-                style={{ background: agent.color }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.filter = 'brightness(1.12)'
-                  e.currentTarget.style.boxShadow = `0 0 20px rgba(${agent.colorRgb}, 0.4)`
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.filter = 'none'
-                  e.currentTarget.style.boxShadow = 'none'
-                }}
-              >
-                {t('pricing.hire')} {agent.name} →
-              </Link>
             </motion.div>
           ))}
         </div>
 
         {/* Bundle cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5" style={{ marginBottom: '56px' }}>
           {[
-            {
-              label: t('pricing.pack2'),
-              badge: t('pricing.discount15'),
-              accent: false,
-              delay: 0.32,
-            },
-            {
-              label: t('pricing.packFull'),
-              badge: t('pricing.discount25'),
-              tag: t('pricing.bestValue'),
-              accent: true,
-              delay: 0.4,
-            },
+            { label: t('pricing.pack2'), badge: t('pricing.discount15'), accent: false, delay: 0.32 },
+            { label: t('pricing.packFull'), badge: t('pricing.discount25'), tag: t('pricing.bestValue'), accent: true, delay: 0.4 },
           ].map((pack) => (
             <motion.div
               key={pack.label}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: pack.delay }}
-              className="rounded-2xl p-8 relative overflow-hidden"
               style={{
-                background: pack.accent
-                  ? 'linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(99,102,241,0.03) 100%)'
-                  : 'var(--s1)',
-                border: pack.accent
-                  ? '1px solid rgba(99,102,241,0.25)'
-                  : '1px solid var(--b1)',
+                background: pack.accent ? '#0f172a' : '#0f172a',
+                border: pack.accent ? '1px solid rgba(99,102,241,0.3)' : '1px solid rgba(255,255,255,0.07)',
+                borderRadius: '16px', padding: '32px',
+                position: 'relative', overflow: 'hidden',
               }}
             >
               {pack.accent && (
-                <div
-                  className="absolute inset-x-0 top-0 h-px"
-                  style={{ background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.6), transparent)' }}
-                />
+                <div style={{
+                  position: 'absolute', inset: '0 0 auto 0', height: '1px',
+                  background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.7), transparent)',
+                }} />
               )}
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="display font-bold text-lg" style={{ color: 'var(--t1)' }}>{pack.label}</h3>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '8px', position: 'relative', zIndex: 1 }}>
+                <h3 className="display font-bold" style={{ fontSize: '20px', color: '#F1F5F9' }}>{pack.label}</h3>
                 {pack.tag && (
-                  <span
-                    className="text-xs px-2.5 py-1 rounded-full font-medium"
-                    style={{
-                      background: 'rgba(99,102,241,0.15)',
-                      border: '1px solid rgba(99,102,241,0.3)',
-                      color: 'var(--accent2)',
-                    }}
-                  >
+                  <span style={{
+                    fontSize: '12px', padding: '4px 10px', borderRadius: '99px',
+                    background: 'rgba(99,102,241,0.15)',
+                    border: '1px solid rgba(99,102,241,0.3)',
+                    color: '#818CF8', fontWeight: 500,
+                  }}>
                     {pack.tag}
                   </span>
                 )}
               </div>
-              <p className="text-sm mb-5" style={{ color: 'var(--t4)' }}>{t('pricing.consult')}</p>
-              <span
-                className="inline-flex px-3 py-1.5 rounded-full text-sm font-medium"
-                style={{
-                  background: 'rgba(99,102,241,0.12)',
-                  border: '1px solid rgba(99,102,241,0.25)',
-                  color: 'var(--accent2)',
-                }}
-              >
+              <p style={{ fontSize: '14px', color: '#475569', marginBottom: '20px', position: 'relative', zIndex: 1 }}>
+                {t('pricing.consult')}
+              </p>
+              <span style={{
+                display: 'inline-block', padding: '6px 14px', borderRadius: '99px',
+                background: pack.accent ? 'rgba(99,102,241,0.12)' : 'rgba(255,255,255,0.05)',
+                border: pack.accent ? '1px solid rgba(99,102,241,0.28)' : '1px solid rgba(255,255,255,0.08)',
+                color: pack.accent ? '#818CF8' : '#94A3B8',
+                fontSize: '14px', fontWeight: 500,
+                position: 'relative', zIndex: 1,
+              }}>
                 {pack.badge}
               </span>
             </motion.div>
@@ -199,33 +211,32 @@ export default function Pricing() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="text-sm mb-10 max-w-xl"
-          style={{ color: 'var(--t4)' }}
+          style={{ fontSize: '14px', marginBottom: '40px', maxWidth: '520px', color: '#475569', lineHeight: '1.6' }}
         >
           {t('pricing.note')}
         </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.55 }}
-        >
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }}>
           <Link
             to="/book"
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-white text-sm transition-all duration-200"
-            style={{ background: 'var(--accent)' }}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              padding: '14px 28px', borderRadius: '12px',
+              background: 'linear-gradient(135deg, #6366F1, #7C3AED)',
+              boxShadow: '0 0 24px rgba(99,102,241,0.35)',
+              color: '#fff', fontWeight: 600, fontSize: '14px',
+              textDecoration: 'none', transition: 'all 0.2s',
+            }}
             onMouseEnter={e => {
-              e.currentTarget.style.background = 'var(--accent2)'
-              e.currentTarget.style.boxShadow = '0 0 28px rgba(99,102,241,0.45)'
+              e.currentTarget.style.boxShadow = '0 0 40px rgba(99,102,241,0.55)'
               e.currentTarget.style.transform = 'translateY(-1px)'
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.background = 'var(--accent)'
-              e.currentTarget.style.boxShadow = 'none'
+              e.currentTarget.style.boxShadow = '0 0 24px rgba(99,102,241,0.35)'
               e.currentTarget.style.transform = 'none'
             }}
           >
-            {t('pricing.cta')}
+            {t('pricing.cta')} →
           </Link>
         </motion.div>
 

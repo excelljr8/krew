@@ -7,8 +7,19 @@ export default function Agents() {
   const { t } = useTranslation()
 
   return (
-    <div className="min-h-screen pt-28 pb-32">
-      <div className="max-w-7xl mx-auto px-6 lg:px-14">
+    <div className="min-h-screen pt-28 pb-32 relative overflow-hidden">
+      <div
+        className="absolute pointer-events-none"
+        aria-hidden="true"
+        style={{
+          width: '600px', height: '600px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(99,102,241,0.07) 0%, transparent 65%)',
+          top: '-150px', left: '-150px',
+        }}
+      />
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-14 relative z-10">
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -29,7 +40,7 @@ export default function Agents() {
           >
             {t('agents.title')}
           </h1>
-          <p className="text-base max-w-lg" style={{ color: 'var(--t3)' }}>
+          <p className="text-base max-w-lg leading-relaxed" style={{ color: 'var(--t3)' }}>
             {t('agents.subtitle')}
           </p>
         </motion.div>

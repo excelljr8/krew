@@ -8,96 +8,114 @@ export default function AgentCard({ agent, index = 0 }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.55, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
-      className="h-full"
+      transition={{ duration: 0.5, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
     >
-      <Link to={`/agents/${agent.id}`} className="block h-full group">
+      <Link to={`/agents/${agent.id}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
         <div
-          className="h-full flex flex-col overflow-hidden transition-all duration-300 rounded-2xl"
           style={{
-            background: 'rgba(255,255,255,0.03)',
+            background: '#0f172a',
             border: `1px solid rgba(${agent.colorRgb}, 0.2)`,
+            borderRadius: '16px',
+            overflow: 'hidden',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            transition: 'all 0.25s ease',
           }}
           onMouseEnter={e => {
             e.currentTarget.style.borderColor = `rgba(${agent.colorRgb}, 0.5)`
             e.currentTarget.style.transform = 'translateY(-4px)'
-            e.currentTarget.style.boxShadow = `0 24px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(${agent.colorRgb}, 0.15)`
+            e.currentTarget.style.boxShadow = `0 20px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(${agent.colorRgb}, 0.12)`
+            e.currentTarget.style.background = '#131e35'
           }}
           onMouseLeave={e => {
             e.currentTarget.style.borderColor = `rgba(${agent.colorRgb}, 0.2)`
             e.currentTarget.style.transform = 'none'
             e.currentTarget.style.boxShadow = 'none'
+            e.currentTarget.style.background = '#0f172a'
           }}
         >
-          {/* Colored header */}
-          <div
-            className="relative flex items-end px-7 pt-7 pb-5 overflow-hidden"
-            style={{
-              background: `linear-gradient(135deg, rgba(${agent.colorRgb}, 0.18) 0%, rgba(${agent.colorRgb}, 0.06) 100%)`,
-              borderBottom: `1px solid rgba(${agent.colorRgb}, 0.15)`,
-            }}
-          >
-            {/* Big decorative initial */}
-            <span
-              className="absolute right-4 top-1 font-display font-extrabold select-none pointer-events-none"
-              style={{
-                fontSize: '80px',
-                lineHeight: 1,
-                color: agent.color,
-                opacity: 0.12,
-              }}
-            >
-              {agent.initial}
-            </span>
+          {/* Top color strip */}
+          <div style={{ height: '3px', background: `linear-gradient(90deg, ${agent.color}, rgba(${agent.colorRgb},0.2))`, flexShrink: 0 }} />
 
-            {/* Avatar + name */}
-            <div className="relative z-10 flex items-center gap-3">
-              <div
-                className="w-11 h-11 rounded-xl flex items-center justify-center font-display font-bold text-lg flex-shrink-0"
-                style={{ background: `rgba(${agent.colorRgb}, 0.2)`, color: agent.color }}
-              >
-                {agent.initial}
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span
-                    className="font-display font-extrabold text-2xl leading-none"
-                    style={{ color: agent.color }}
-                  >
-                    {agent.name}
-                  </span>
-                  <span
-                    className="w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0"
-                    style={{ background: agent.color }}
-                  />
+          <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+            {/* Header row */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{
+                  width: '44px', height: '44px', borderRadius: '12px', flexShrink: 0,
+                  background: `rgba(${agent.colorRgb}, 0.15)`,
+                  border: `1px solid rgba(${agent.colorRgb}, 0.3)`,
+                  color: agent.color, fontFamily: 'Syne, sans-serif',
+                  fontWeight: 800, fontSize: '18px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  {agent.initial}
                 </div>
-                <p className="text-xs font-medium uppercase tracking-widest mt-0.5" style={{ color: 'var(--grey-600)' }}>
-                  {agent.role[lang]}
-                </p>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ color: agent.color, fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '20px', lineHeight: 1 }}>
+                      {agent.name}
+                    </span>
+                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: agent.color, flexShrink: 0 }} />
+                  </div>
+                  <p style={{ color: '#475569', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: '3px' }}>
+                    {agent.role[lang]}
+                  </p>
+                </div>
+              </div>
+              <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                <div style={{ color: '#F1F5F9', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '17px', lineHeight: 1 }}>
+                  {agent.monthly[lang]}
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Body */}
-          <div className="flex flex-col flex-1 p-7">
+            {/* Divider */}
+            <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', marginBottom: '20px' }} />
+
             {/* Tagline */}
-            <p className="text-[15px] leading-relaxed mb-5 flex-1" style={{ color: 'var(--grey-400)' }}>
+            <p style={{ color: '#94A3B8', fontSize: '14px', lineHeight: '1.65', marginBottom: '20px', flex: 1 }}>
               {agent.tagline[lang]}
             </p>
 
+            {/* Metrics */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '16px' }}>
+              {agent.metrics.map((m) => (
+                <div
+                  key={m.value}
+                  style={{
+                    background: 'rgba(255,255,255,0.04)',
+                    border: '1px solid rgba(255,255,255,0.07)',
+                    borderRadius: '8px',
+                    padding: '10px 6px',
+                    textAlign: 'center',
+                  }}
+                >
+                  <div style={{ color: '#F1F5F9', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '14px', lineHeight: 1 }}>
+                    {m.value}
+                  </div>
+                  <div style={{ color: '#475569', fontSize: '10px', marginTop: '4px', lineHeight: 1.3 }}>
+                    {m.label[lang]}
+                  </div>
+                </div>
+              ))}
+            </div>
+
             {/* Channels */}
-            <div className="flex flex-wrap gap-1.5 mb-6">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '20px' }}>
               {agent.channels.map((ch) => (
                 <span
                   key={ch}
-                  className="text-xs px-2.5 py-1 rounded-full font-medium"
                   style={{
-                    background: `rgba(${agent.colorRgb}, 0.1)`,
-                    border: `1px solid rgba(${agent.colorRgb}, 0.22)`,
+                    background: `rgba(${agent.colorRgb}, 0.08)`,
+                    border: `1px solid rgba(${agent.colorRgb}, 0.2)`,
                     color: agent.color,
+                    padding: '4px 10px', borderRadius: '99px',
+                    fontSize: '12px', fontWeight: 500,
                   }}
                 >
                   {ch}
@@ -106,11 +124,8 @@ export default function AgentCard({ agent, index = 0 }) {
             </div>
 
             {/* CTA */}
-            <div
-              className="flex items-center gap-1.5 text-sm font-semibold transition-all duration-200 group-hover:gap-3"
-              style={{ color: agent.color }}
-            >
-              {t('agents.cta')}
+            <div style={{ color: agent.color, fontSize: '13px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+              {t('agents.cta')} →
             </div>
           </div>
         </div>
