@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Krew — AI Employees for Real Business</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+/* ── RESET & TOKENS ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#060612;--navy-2:#0d0d1f;--navy-3:#13132a;
+  --purple:#6e54f7;--purple-light:#8b74ff;--purple-dim:rgba(110,84,247,0.15);
+  --off-white:#f6f6fb;--gray-100:#f0f0f8;--gray-200:#e2e2f0;
+  --text-dark:#0d0d1f;--text-muted:#6b6b90;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--navy);color:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:rgba(110,84,247,0.3);color:white}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--navy)}
+::-webkit-scrollbar-thumb{background:rgba(110,84,247,0.35);border-radius:99px}
+a{color:inherit;text-decoration:none}
+button{font-family:'Inter',sans-serif}
+
+/* ── BILINGUAL ── */
+body.lang-es .en-text{display:none!important}
+body:not(.lang-es) .es-text{display:none!important}
+
+/* ── SCROLL PROGRESS ── */
+#scroll-progress{
+  position:fixed;top:0;left:0;right:0;height:3px;z-index:9999;
+  background:linear-gradient(90deg,var(--purple),var(--purple-light));
+  transform-origin:left;transform:scaleX(0);transition:transform 0.05s linear;
+  pointer-events:none;
+}
+
+/* ── ANNOUNCE BAR ── */
+#announce-bar{
+  background:#0d0a2e;border-bottom:1px solid rgba(110,84,247,0.15);
+  padding:9px 48px;display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:rgba(255,255,255,0.7);position:relative;gap:6px;
+}
+#announce-bar .dismiss{
+  position:absolute;right:16px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:rgba(255,255,255,0.35);cursor:pointer;
+  font-size:18px;line-height:1;padding:4px 6px;transition:color 0.15s;
+}
+#announce-bar .dismiss:hover{color:rgba(255,255,255,0.75)}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(6,6,18,0.88);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  box-shadow:0 1px 0 rgba(110,84,247,0.2);
+}
+.nav-inner{
+  max-width:1280px;margin:0 auto;padding:0 32px;
+  height:64px;display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:22px;
+  letter-spacing:-0.02em;color:#fff;display:flex;align-items:center;gap:8px;
+}
+.nav-logo-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:linear-gradient(135deg,var(--purple),#22d3ee);
+  box-shadow:0 0 10px rgba(110,84,247,0.7);
+  flex-shrink:0;
+}
+.nav-links{display:flex;gap:28px}
+.nav-links a{color:rgba(255,255,255,0.5);font-size:14px;transition:color 0.15s}
+.nav-links a:hover{color:#fff}
+.nav-actions{display:flex;align-items:center;gap:14px}
+.lang-btn{
+  background:none;border:1px solid rgba(255,255,255,0.12);
+  color:rgba(255,255,255,0.45);font-size:11px;font-family:monospace;
+  padding:5px 10px;border-radius:6px;cursor:pointer;
+  transition:all 0.15s;letter-spacing:0.1em;
+}
+.lang-btn:hover{border-color:rgba(255,255,255,0.28);color:rgba(255,255,255,0.8)}
+.nav-cta{
+  background:linear-gradient(135deg,var(--purple),#7c3aed);
+  color:#fff;padding:9px 18px;border-radius:8px;
+  font-size:13px;font-weight:600;letter-spacing:0.01em;
+  box-shadow:0 0 20px rgba(110,84,247,0.3);transition:all 0.2s;
+}
+.nav-cta:hover{box-shadow:0 0 32px rgba(110,84,247,0.5);transform:translateY(-1px)}
+
+/* ── HERO ── */
+#hero{
+  background:var(--navy);min-height:100vh;position:relative;overflow:hidden;
+  display:flex;align-items:center;padding:120px 0 80px;
+  scroll-margin-top:80px;
+}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+.blob-purple{
+  width:600px;height:600px;
+  background:rgba(110,84,247,0.08);
+  top:-80px;right:-80px;
+  animation:blob-float 20s ease-in-out infinite alternate;
+}
+.blob-blue{
+  width:500px;height:500px;
+  background:rgba(59,130,246,0.05);
+  bottom:-60px;left:-60px;
+  animation:blob-float 20s ease-in-out infinite alternate-reverse;
+}
+@keyframes blob-float{from{transform:translateY(0)}to{transform:translateY(-20px)}}
+.hero-grid{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(255,255,255,0.022) 1px,transparent 1px);
+  background-size:40px 40px;
+  -webkit-mask-image:radial-gradient(ellipse 65% 70% at 50% 40%,black 20%,transparent 80%);
+  mask-image:radial-gradient(ellipse 65% 70% at 50% 40%,black 20%,transparent 80%);
+}
+.hero-inner{
+  max-width:1280px;margin:0 auto;padding:0 32px;
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(110,84,247,0.1);border:1px solid rgba(110,84,247,0.28);
+  color:#a78bfa;font-size:12px;font-weight:500;
+  padding:6px 14px;border-radius:99px;margin-bottom:28px;
+}
+.badge-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--purple);box-shadow:0 0 8px rgba(110,84,247,0.9);
+  display:inline-block;animation:pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:0.35}}
+.hero-h1{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(64px,7vw,88px);
+  letter-spacing:-0.03em;line-height:1;
+  margin-bottom:20px;max-width:13ch;
+}
+.hero-h1 .grad{
+  background:linear-gradient(135deg,#a78bfa 0%,var(--purple) 45%,#22d3ee 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{
+  font-size:17px;line-height:1.65;max-width:500px;
+  color:rgba(255,255,255,0.48);margin-bottom:40px;
+}
+.hero-ctas{display:flex;gap:12px;margin-bottom:52px;flex-wrap:wrap;justify-content:center}
+.btn-primary{
+  background:linear-gradient(135deg,var(--purple),#7c3aed);
+  color:#fff;padding:14px 28px;border-radius:10px;
+  font-size:15px;font-weight:600;letter-spacing:0.01em;
+  border:none;cursor:pointer;display:inline-block;
+  box-shadow:0 0 28px rgba(110,84,247,0.4),inset 0 1px 0 rgba(255,255,255,0.15);
+  transition:all 0.2s;
+}
+.btn-primary:hover{box-shadow:0 0 48px rgba(110,84,247,0.6),inset 0 1px 0 rgba(255,255,255,0.15);transform:translateY(-2px)}
+.btn-secondary{
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);
+  color:rgba(255,255,255,0.65);padding:14px 28px;border-radius:10px;
+  font-size:15px;font-weight:500;letter-spacing:0.01em;
+  cursor:pointer;display:inline-block;transition:all 0.2s;
+}
+.btn-secondary:hover{background:rgba(255,255,255,0.09);border-color:rgba(255,255,255,0.24);color:#fff}
+.hero-pills{
+  display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:52px;
+}
+.agent-pill{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);
+  border-radius:99px;padding:8px 16px 8px 8px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+  opacity:0;transform:translateY(10px);
+  transition:opacity 0.5s,transform 0.5s,background 0.15s,box-shadow 0.15s;
+}
+.agent-pill.visible{opacity:1;transform:none}
+.agent-pill:hover{background:rgba(255,255,255,0.07);transform:translateY(-2px)!important;box-shadow:0 12px 40px rgba(0,0,0,0.5)}
+.pill-av{
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:11px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.15);flex-shrink:0;
+}
+.pill-name{font-size:13px;font-weight:600;color:#fff}
+.pill-price{font-size:11px;color:rgba(255,255,255,0.4);font-family:monospace}
+.hero-stats{
+  display:flex;border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px;overflow:hidden;margin-bottom:36px;
+}
+.hstat{
+  padding:16px 28px;text-align:center;flex:1;
+  border-right:1px solid rgba(255,255,255,0.08);
+}
+.hstat:last-child{border-right:none}
+.hstat-val{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:22px;letter-spacing:-0.02em;line-height:1;margin-bottom:4px;
+  background:linear-gradient(135deg,#fff 60%,#a78bfa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hstat-lbl{font-size:11px;color:rgba(255,255,255,0.3)}
+.scroll-hint{
+  font-size:12px;color:rgba(255,255,255,0.22);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.scroll-arrow{
+  width:14px;height:14px;
+  border-right:1.5px solid rgba(255,255,255,0.22);
+  border-bottom:1.5px solid rgba(255,255,255,0.22);
+  transform:rotate(45deg);
+  animation:bounce-down 1.6s ease-in-out infinite;
+}
+@keyframes bounce-down{
+  0%,100%{transform:rotate(45deg) translateY(0)}
+  50%{transform:rotate(45deg) translateY(4px)}
+}
+
+/* ── SECTION SHARED ── */
+.sec-inner{max-width:1280px;margin:0 auto;padding:0 32px}
+.sec-label{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;font-family:monospace;margin-bottom:12px}
+.sec-h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(36px,4vw,52px);letter-spacing:-0.03em;line-height:1;margin-bottom:14px}
+.sec-sub{font-size:16px;line-height:1.65;max-width:480px;margin-bottom:56px}
+
+/* ── AGENTS (light) ── */
+#agents{background:var(--off-white);color:var(--text-dark);padding:96px 0;scroll-margin-top:80px}
+#agents .sec-label{color:var(--text-muted)}
+#agents .sec-h2{color:var(--text-dark)}
+#agents .sec-sub{color:var(--text-muted)}
+.agents-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.agent-card{
+  background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,0.07);
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:all 0.25s ease;position:relative;cursor:pointer;
+}
+.agent-card:hover{
+  box-shadow:0 0 0 2px rgba(110,84,247,0.3),0 16px 48px rgba(110,84,247,0.08);
+  transform:translateY(-4px);
+}
+.card-stripe{height:3px;width:100%;flex-shrink:0}
+.popular-badge{
+  position:absolute;top:16px;right:16px;
+  background:var(--purple);color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:0.06em;
+  padding:3px 9px;border-radius:99px;text-transform:uppercase;
+}
+.card-body{padding:20px;flex:1;display:flex;flex-direction:column}
+.card-header{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.card-av{
+  width:44px;height:44px;border-radius:12px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:18px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.card-name{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-0.02em;line-height:1}
+.card-role{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.07em;margin-top:3px}
+.card-price{margin-left:auto;text-align:right;flex-shrink:0}
+.price-val{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.02em;line-height:1}
+.price-unit{font-size:11px;color:var(--text-muted)}
+.card-divider{height:1px;background:rgba(0,0,0,0.06);margin:0 0 14px}
+.card-tagline{font-size:13px;color:var(--text-muted);line-height:1.55;margin-bottom:12px;flex:1}
+.card-metrics{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.metric-chip{
+  font-size:11px;padding:4px 10px;border-radius:6px;font-weight:500;
+  transition:filter 0.15s;cursor:default;
+}
+.metric-chip:hover{filter:brightness(0.9)}
+.card-channels{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px}
+.channel-tag{font-size:11px;padding:3px 9px;border-radius:99px;font-weight:500}
+.card-hire-btn{
+  width:100%;padding:10px;border-radius:8px;
+  font-size:13px;font-weight:600;letter-spacing:0.01em;
+  cursor:pointer;text-align:center;transition:all 0.2s;
+  display:block;border:none;
+}
+
+/* ── HIRE (dark) ── */
+#hire{background:var(--navy-2);color:#fff;padding:96px 0;scroll-margin-top:80px}
+.hire-layout{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.hire-info-label{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;font-family:monospace;color:rgba(255,255,255,0.3);margin-bottom:14px}
+.hire-info-h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(32px,3vw,46px);letter-spacing:-0.03em;line-height:1.05;color:#fff;margin-bottom:18px}
+.hire-info-p{font-size:15px;color:rgba(255,255,255,0.45);line-height:1.65;margin-bottom:32px}
+.hire-features{display:flex;flex-direction:column;gap:14px}
+.hire-feat{display:flex;align-items:flex-start;gap:12px}
+.feat-icon{
+  width:22px;height:22px;border-radius:6px;flex-shrink:0;
+  background:var(--purple-dim);border:1px solid rgba(110,84,247,0.3);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--purple-light);font-size:11px;margin-top:1px;
+}
+.feat-text{font-size:14px;color:rgba(255,255,255,0.55);line-height:1.45}
+.feat-text strong{color:#fff;font-weight:600}
+/* Widget */
+.hire-widget{
+  background:var(--navy-3);
+  border:1px solid rgba(110,84,247,0.25);
+  border-radius:20px;padding:32px;
+  box-shadow:0 0 60px rgba(110,84,247,0.06);
+  position:relative;overflow:hidden;
+}
+.hire-widget::before{
+  content:'';position:absolute;inset:0 0 auto 0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(110,84,247,0.6),transparent);
+}
+.hire-widget::after{
+  content:'';position:absolute;inset:auto 0 0 0;height:3px;
+  background:linear-gradient(90deg,var(--purple),var(--purple-light));
+  border-radius:0 0 20px 20px;
+}
+.widget-title{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.02em;margin-bottom:6px}
+.widget-sub{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:24px}
+.widget-step-label{font-size:10px;font-family:monospace;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:10px}
+.hire-agents{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:24px}
+.hire-agent-btn{
+  display:flex;align-items:center;gap:9px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-radius:10px;padding:11px 10px;cursor:pointer;transition:all 0.2s;text-align:left;
+}
+.hire-agent-btn:hover{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.16)}
+.hire-agent-btn.selected{border-color:var(--purple);background:var(--purple-dim)}
+.h-av{
+  width:34px;height:34px;border-radius:9px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:13px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.h-name{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;line-height:1;margin-bottom:2px}
+.h-role{font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.05em}
+.h-price{margin-left:auto;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;flex-shrink:0}
+/* Slider */
+.slider-wrap{position:relative;padding-top:36px;margin-bottom:6px}
+.slider-tip{
+  position:absolute;top:0;
+  background:var(--purple);color:#fff;
+  font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;
+  transform:translateX(-50%);white-space:nowrap;pointer-events:none;
+  transition:left 0.05s;
+}
+.slider-tip::after{
+  content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:4px solid transparent;border-top-color:var(--purple);
+}
+.hour-slider{
+  width:100%;height:6px;border-radius:99px;outline:none;cursor:pointer;
+  -webkit-appearance:none;appearance:none;
+  background:linear-gradient(90deg,var(--purple) var(--pct,5%),rgba(255,255,255,0.1) var(--pct,5%));
+}
+.hour-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+  background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.4);cursor:pointer;
+}
+.hour-slider::-moz-range-thumb{
+  width:20px;height:20px;border-radius:50%;border:none;
+  background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.4);cursor:pointer;
+}
+.slider-labs{
+  display:flex;justify-content:space-between;
+  font-size:10px;color:rgba(255,255,255,0.22);font-family:monospace;margin-top:5px;margin-bottom:16px;
+}
+.discount-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);
+  color:#34d399;font-size:11px;font-weight:600;
+  padding:5px 12px;border-radius:99px;margin-bottom:16px;
+  transition:all 0.3s;min-height:28px;
+}
+.discount-badge.active{background:rgba(16,185,129,0.14);border-color:rgba(16,185,129,0.38)}
+.discount-badge.flash{animation:flash-g 0.5s ease}
+@keyframes flash-g{0%{transform:scale(1)}40%{transform:scale(1.08);background:rgba(16,185,129,0.28)}100%{transform:scale(1)}}
+.hire-price-box{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin-bottom:18px;padding:18px 20px;
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);
+  border-radius:12px;
+}
+.price-lbl{font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:4px}
+.price-total{font-family:'Syne',sans-serif;font-weight:800;font-size:30px;letter-spacing:-0.02em}
+.price-per-h{font-size:12px;color:rgba(255,255,255,0.3);margin-left:5px}
+.price-savings{font-size:13px;color:#34d399;font-weight:600}
+.hire-cta-btn{
+  width:100%;padding:14px;border-radius:10px;
+  background:linear-gradient(135deg,var(--purple),#7c3aed);
+  color:#fff;font-size:15px;font-weight:600;letter-spacing:0.01em;
+  border:none;cursor:pointer;transition:all 0.2s;
+  box-shadow:0 0 28px rgba(110,84,247,0.35),inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.hire-cta-btn:hover{box-shadow:0 0 48px rgba(110,84,247,0.55);transform:translateY(-1px)}
+.hire-note{text-align:center;font-size:11px;color:rgba(255,255,255,0.22);margin-top:10px}
+
+/* ── HOW IT WORKS (light) ── */
+#how{background:var(--gray-100);color:var(--text-dark);padding:96px 0;scroll-margin-top:80px}
+#how .sec-label{color:var(--text-muted)}
+#how .sec-h2{color:var(--text-dark)}
+.steps-wrap{position:relative}
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;z-index:1}
+.step-connector{
+  position:absolute;top:54px;height:0;
+  border-top:2px dashed rgba(110,84,247,0.22);pointer-events:none;
+  width:calc(25% - 48px);
+}
+.step-connector::after{
+  content:'';position:absolute;right:-7px;top:-6px;
+  border:6px solid transparent;border-left-color:rgba(110,84,247,0.35);
+}
+.conn-1{left:calc(25% + 24px)}.conn-2{left:calc(50% + 24px)}.conn-3{left:calc(75% + 24px)}
+.step-card{
+  background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,0.07);
+  padding:26px 22px;margin:4px;display:flex;flex-direction:column;
+  position:relative;
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.5s ease,transform 0.5s ease,border-color 0.2s,box-shadow 0.2s;
+}
+.step-card.visible{opacity:1;transform:none}
+.step-card:hover{border-color:rgba(110,84,247,0.2);box-shadow:0 8px 32px rgba(110,84,247,0.06)}
+.step-time{
+  position:absolute;top:14px;right:14px;
+  background:var(--gray-100);border:1px solid var(--gray-200);
+  color:var(--text-muted);font-size:10px;font-weight:500;
+  padding:2px 8px;border-radius:6px;
+}
+.step-icon{
+  width:40px;height:40px;border-radius:10px;
+  background:var(--purple-dim);border:1px solid rgba(110,84,247,0.2);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--purple);margin-bottom:20px;
+}
+.step-num{font-family:monospace;font-size:10px;color:rgba(110,84,247,0.45);letter-spacing:0.08em;margin-bottom:4px}
+.step-title{font-size:15px;font-weight:600;color:var(--text-dark);margin-bottom:8px;line-height:1.3}
+.step-desc{font-size:13px;color:var(--text-muted);line-height:1.6}
+
+/* ── REVIEWS (light) ── */
+#reviews{background:var(--off-white);color:var(--text-dark);padding:96px 0;scroll-margin-top:80px}
+#reviews .sec-label{color:var(--text-muted)}
+#reviews .sec-h2{color:var(--text-dark)}
+.rating-summary{text-align:center;margin-bottom:52px}
+.rating-big{font-family:'Syne',sans-serif;font-weight:800;font-size:60px;letter-spacing:-0.03em;line-height:1;color:var(--text-dark);margin-bottom:6px}
+.rating-stars{font-size:24px;letter-spacing:2px;margin-bottom:6px}
+.rating-count{font-size:13px;color:var(--text-muted)}
+.reviews-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.review-card{
+  background:#fff;border-radius:16px;padding:24px;
+  border:1px solid rgba(0,0,0,0.07);transition:all 0.2s;
+}
+.review-card:hover{box-shadow:0 8px 32px rgba(0,0,0,0.06);transform:translateY(-2px)}
+.review-stars{font-size:13px;letter-spacing:1px;margin-bottom:12px}
+.review-text{font-size:13px;color:var(--text-muted);line-height:1.65;margin-bottom:16px;font-style:italic}
+.review-author{display:flex;align-items:center;gap:10px}
+.review-av{
+  width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  background:var(--purple-dim);border:1px solid rgba(110,84,247,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:12px;color:var(--purple);
+}
+.rev-name{font-size:13px;font-weight:600;color:var(--text-dark)}
+.rev-title{font-size:11px;color:var(--text-muted)}
+
+/* ── CTA (dark) ── */
+#cta{background:var(--navy);padding:128px 0;position:relative;overflow:hidden;scroll-margin-top:80px}
+.cta-blob{
+  position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(110,84,247,0.09) 0%,transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+}
+.cta-inner{text-align:center;position:relative;z-index:1}
+.cta-label{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;font-family:monospace;color:rgba(255,255,255,0.3);margin-bottom:16px}
+.cta-h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(40px,5vw,64px);letter-spacing:-0.03em;line-height:1;color:#fff;margin-bottom:14px}
+.cta-sub{font-size:16px;color:rgba(255,255,255,0.42);max-width:420px;margin:0 auto 36px;line-height:1.6}
+.cta-checks{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;margin-bottom:36px}
+.cta-check{display:flex;align-items:center;gap:8px;font-size:14px;color:rgba(255,255,255,0.55)}
+.check-icon{
+  width:20px;height:20px;border-radius:50%;flex-shrink:0;
+  background:rgba(110,84,247,0.2);border:1px solid rgba(110,84,247,0.4);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--purple-light);font-size:10px;
+}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--navy-2);
+  border-top:1px solid;
+  border-image:linear-gradient(90deg,transparent,rgba(110,84,247,0.45),transparent) 1;
+}
+.footer-inner{max-width:1280px;margin:0 auto;padding:40px 32px 28px}
+.footer-top{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:24px;margin-bottom:24px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.footer-tagline{font-size:14px;color:rgba(255,255,255,0.32);max-width:300px}
+.footer-socials{display:flex;gap:8px}
+.social-icon{
+  width:28px;height:28px;border-radius:50%;
+  border:1px solid rgba(255,255,255,0.12);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,0.38);font-size:11px;font-weight:700;
+  transition:all 0.15s;
+}
+.social-icon:hover{border-color:rgba(110,84,247,0.5);color:var(--purple-light);background:rgba(110,84,247,0.08)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:18px;
+  letter-spacing:-0.02em;color:#fff;display:flex;align-items:center;gap:6px;
+}
+.footer-logo-dot{width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,var(--purple),#22d3ee)}
+.footer-links{display:flex;gap:22px}
+.footer-links a{font-size:13px;color:rgba(255,255,255,0.3);transition:color 0.15s}
+.footer-links a:hover{color:rgba(255,255,255,0.65)}
+.footer-copy{font-size:12px;color:rgba(255,255,255,0.22)}
+.status-dot{
+  display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:#34d399;box-shadow:0 0 6px rgba(52,211,153,0.6);
+  margin-right:4px;animation:pulse-dot 2s ease-in-out infinite;
+}
+
+/* ── MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(6,6,18,0.85);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  opacity:0;pointer-events:none;transition:opacity 0.25s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--navy-3);border:1px solid rgba(110,84,247,0.25);
+  border-radius:20px;padding:40px;max-width:520px;width:100%;
+  position:relative;max-height:90vh;overflow-y:auto;
+  transform:translateY(20px);transition:transform 0.3s;
+}
+.modal-overlay.open .modal{transform:none}
+.modal-close{
+  position:absolute;top:16px;right:16px;
+  background:none;border:none;color:rgba(255,255,255,0.4);
+  font-size:20px;cursor:pointer;padding:4px 8px;transition:color 0.15s;
+}
+.modal-close:hover{color:#fff}
+.modal-h{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.02em;margin-bottom:6px}
+.modal-sub{font-size:14px;color:rgba(255,255,255,0.4);margin-bottom:28px}
+.form-field{margin-bottom:16px}
+.form-field label{display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,0.55);margin-bottom:6px;letter-spacing:0.04em;text-transform:uppercase;font-family:monospace}
+.form-field input,.form-field select,.form-field textarea{
+  width:100%;background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);border-radius:8px;
+  padding:10px 14px;color:#fff;font-size:14px;font-family:'Inter',sans-serif;
+  outline:none;transition:border-color 0.15s;
+}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:rgba(110,84,247,0.5)}
+.form-field select option{background:var(--navy-3);color:#fff}
+.form-field textarea{resize:vertical;min-height:80px}
+.modal-submit{
+  width:100%;padding:13px;border-radius:10px;margin-top:8px;
+  background:linear-gradient(135deg,var(--purple),#7c3aed);
+  color:#fff;font-size:15px;font-weight:600;letter-spacing:0.01em;
+  border:none;cursor:pointer;transition:all 0.2s;
+  box-shadow:0 0 24px rgba(110,84,247,0.3);
+}
+.modal-submit:hover{box-shadow:0 0 40px rgba(110,84,247,0.5);transform:translateY(-1px)}
+.modal-note{text-align:center;font-size:12px;color:rgba(255,255,255,0.22);margin-top:10px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .agents-grid{grid-template-columns:repeat(2,1fr)}
+  .hire-layout{grid-template-columns:1fr}
+  .steps-grid{grid-template-columns:repeat(2,1fr)}
+  .reviews-grid{grid-template-columns:repeat(2,1fr)}
+  .step-connector{display:none}
+}
+@media(max-width:640px){
+  .nav-links{display:none}
+  .hero-h1{font-size:clamp(48px,13vw,72px)}
+  .hero-stats{flex-direction:column;border-radius:8px}
+  .hstat{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08)}
+  .hstat:last-child{border-bottom:none}
+  .agents-grid,.reviews-grid,.steps-grid{grid-template-columns:1fr}
+  .hire-agents{grid-template-columns:1fr 1fr}
+  .cta-checks{flex-direction:column;align-items:center;gap:12px}
+  .footer-top{flex-direction:column;gap:16px;align-items:flex-start}
+  .footer-bottom{flex-direction:column;gap:12px;align-items:flex-start}
+}
+</style>
+</head>
+<body class="lang-es">
+
+<!-- Scroll progress -->
+<div id="scroll-progress"></div>
+
+<!-- Announce bar -->
+<div id="announce-bar">
+  <span>🚀</span>
+  <span>Now available in English &amp; Spanish &nbsp;·&nbsp; Ahora disponible en inglés y español</span>
+  <button class="dismiss" onclick="dismissAnnounce()" aria-label="Dismiss">×</button>
+</div>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">
+      KREW
+      <span class="nav-logo-dot"></span>
+    </a>
+    <div class="nav-links">
+      <a href="#agents" class="es-text">Agentes</a>
+      <a href="#agents" class="en-text">Agents</a>
+      <a href="#hire" class="es-text">Contratar</a>
+      <a href="#hire" class="en-text">Hire Now</a>
+      <a href="#how" class="es-text">Cómo funciona</a>
+      <a href="#how" class="en-text">How it Works</a>
+    </div>
+    <div class="nav-actions">
+      <button id="lang-btn" class="lang-btn" onclick="toggleLang()">EN</button>
+      <a href="#hire" class="nav-cta">
+        <span class="es-text">Empezar →</span>
+        <span class="en-text">Get Started →</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<section id="hero">
+  <div class="blob blob-purple"></div>
+  <div class="blob blob-blue"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      <span class="es-text">Krew — Empleados de IA para negocios reales</span>
+      <span class="en-text">Krew — AI Employees for real businesses</span>
+    </div>
+
+    <h1 class="hero-h1">
+      <span class="es-text">Tu próximo<br/>empleado no<br/>es <span class="grad">humano.</span></span>
+      <span class="en-text">Your next<br/>employee<br/>isn't <span class="grad">human.</span></span>
+    </h1>
+
+    <p class="hero-sub">
+      <span class="es-text">Contrata agentes de IA con roles reales. Ventas, soporte, recepción y operaciones — en marcha en menos de 24 horas.</span>
+      <span class="en-text">Hire AI agents with real roles. Sales, support, reception, and operations — live in under 24 hours.</span>
+    </p>
+
+    <div class="hero-ctas">
+      <a href="#hire" class="btn-primary">
+        <span class="es-text">Contratar ahora →</span>
+        <span class="en-text">Hire now →</span>
+      </a>
+      <a href="#agents" class="btn-secondary">
+        <span class="es-text">Ver agentes</span>
+        <span class="en-text">Browse agents</span>
+      </a>
+    </div>
+
+    <!-- Agent pills -->
+    <div class="hero-pills">
+      <div class="agent-pill" style="transition-delay:0.6s">
+        <div class="pill-av" style="background:rgba(110,84,247,0.2);border:1px solid rgba(110,84,247,0.35);color:#6e54f7">S</div>
+        <span class="pill-name">SARA</span>
+        <span class="pill-price">€4.90/h</span>
+      </div>
+      <div class="agent-pill" style="transition-delay:0.8s">
+        <div class="pill-av" style="background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.35);color:#10b981">M</div>
+        <span class="pill-name">MAX</span>
+        <span class="pill-price">€3.90/h</span>
+      </div>
+      <div class="agent-pill" style="transition-delay:1.0s">
+        <div class="pill-av" style="background:rgba(236,72,153,0.2);border:1px solid rgba(236,72,153,0.35);color:#ec4899">A</div>
+        <span class="pill-name">ARIA</span>
+        <span class="pill-price">€3.50/h</span>
+      </div>
+      <div class="agent-pill" style="transition-delay:1.2s">
+        <div class="pill-av" style="background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.35);color:#f59e0b">C</div>
+        <span class="pill-name">COLE</span>
+        <span class="pill-price">€4.20/h</span>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="hero-stats">
+      <div class="hstat">
+        <div class="hstat-val">500+</div>
+        <div class="hstat-lbl es-text">contactos / día</div>
+        <div class="hstat-lbl en-text">contacts / day</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-val">&lt;10s</div>
+        <div class="hstat-lbl es-text">tiempo de respuesta</div>
+        <div class="hstat-lbl en-text">response time</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-val">24/7</div>
+        <div class="hstat-lbl es-text">sin interrupciones</div>
+        <div class="hstat-lbl en-text">non-stop</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-val">€3.50/h</div>
+        <div class="hstat-lbl es-text">desde</div>
+        <div class="hstat-lbl en-text">starting from</div>
+      </div>
+    </div>
+
+    <!-- Scroll hint -->
+    <a href="#agents" class="scroll-hint">
+      <span class="es-text">↓ ver agentes</span>
+      <span class="en-text">↓ browse agents</span>
+      <span class="scroll-arrow"></span>
+    </a>
+
+  </div>
+</section>
+
+<!-- ══════════ AGENTS ══════════ -->
+<section id="agents">
+  <div class="sec-inner">
+    <p class="sec-label es-text">El equipo</p>
+    <p class="sec-label en-text">The team</p>
+    <h2 class="sec-h2 es-text">Conoce a tu equipo</h2>
+    <h2 class="sec-h2 en-text">Meet your team</h2>
+    <p class="sec-sub es-text">Cuatro agentes especializados, cada uno con un rol concreto. Contrata el que necesites por horas — las horas nunca caducan.</p>
+    <p class="sec-sub en-text">Four specialized agents, each with a concrete role. Hire the one you need by the hour — hours never expire.</p>
+
+    <div class="agents-grid">
+
+      <!-- SARA -->
+      <div class="agent-card">
+        <div class="card-stripe" style="background:linear-gradient(90deg,#6e54f7,rgba(110,84,247,0.2))"></div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-av" style="background:rgba(110,84,247,0.12);border:1px solid rgba(110,84,247,0.28);color:#6e54f7">S</div>
+            <div>
+              <div class="card-name" style="color:#6e54f7">SARA</div>
+              <div class="card-role es-text">AI Sales Rep</div>
+              <div class="card-role en-text">AI Sales Rep</div>
+            </div>
+            <div class="card-price">
+              <div class="price-val" style="color:#6e54f7">€4.90</div>
+              <div class="price-unit es-text">por hora</div>
+              <div class="price-unit en-text">per hour</div>
+            </div>
+          </div>
+          <div class="card-divider"></div>
+          <p class="card-tagline es-text">Prospecta, cualifica y agenda reuniones. Sin descanso. 500+ contactos al día.</p>
+          <p class="card-tagline en-text">Prospects, qualifies, and books meetings. Non-stop. 500+ contacts per day.</p>
+          <div class="card-metrics">
+            <span class="metric-chip" style="background:rgba(110,84,247,0.08);color:#6e54f7;border:1px solid rgba(110,84,247,0.18)">500+ contactos</span>
+            <span class="metric-chip" style="background:rgba(110,84,247,0.08);color:#6e54f7;border:1px solid rgba(110,84,247,0.18)">&lt;2min respuesta</span>
+            <span class="metric-chip" style="background:rgba(110,84,247,0.08);color:#6e54f7;border:1px solid rgba(110,84,247,0.18)">CRM nativo</span>
+          </div>
+          <div class="card-channels">
+            <span class="channel-tag" style="background:rgba(110,84,247,0.07);border:1px solid rgba(110,84,247,0.18);color:#6e54f7">Email</span>
+            <span class="channel-tag" style="background:rgba(110,84,247,0.07);border:1px solid rgba(110,84,247,0.18);color:#6e54f7">LinkedIn</span>
+            <span class="channel-tag" style="background:rgba(110,84,247,0.07);border:1px solid rgba(110,84,247,0.18);color:#6e54f7">WhatsApp</span>
+          </div>
+          <a href="#hire" onclick="selectAgent('sara')" class="card-hire-btn" style="background:rgba(110,84,247,0.08);border:1px solid rgba(110,84,247,0.2);color:#6e54f7"
+            onmouseover="this.style.background='#6e54f7';this.style.color='#fff';this.style.borderColor='#6e54f7'"
+            onmouseout="this.style.background='rgba(110,84,247,0.08)';this.style.color='#6e54f7';this.style.borderColor='rgba(110,84,247,0.2)'">
+            <span class="es-text">Contratar SARA →</span>
+            <span class="en-text">Hire SARA →</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- MAX -->
+      <div class="agent-card">
+        <div class="card-stripe" style="background:linear-gradient(90deg,#10b981,rgba(16,185,129,0.2))"></div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-av" style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.28);color:#10b981">M</div>
+            <div>
+              <div class="card-name" style="color:#10b981">MAX</div>
+              <div class="card-role es-text">AI Support Agent</div>
+              <div class="card-role en-text">AI Support Agent</div>
+            </div>
+            <div class="card-price">
+              <div class="price-val" style="color:#10b981">€3.90</div>
+              <div class="price-unit es-text">por hora</div>
+              <div class="price-unit en-text">per hour</div>
+            </div>
+          </div>
+          <div class="card-divider"></div>
+          <p class="card-tagline es-text">Atiende a tus clientes 24/7. Respuesta en menos de 10 segundos. 80% de resolución automática.</p>
+          <p class="card-tagline en-text">Supports your customers 24/7. Under 10 second response. 80% auto-resolved.</p>
+          <div class="card-metrics">
+            <span class="metric-chip" style="background:rgba(16,185,129,0.08);color:#10b981;border:1px solid rgba(16,185,129,0.18)">&lt;10s respuesta</span>
+            <span class="metric-chip" style="background:rgba(16,185,129,0.08);color:#10b981;border:1px solid rgba(16,185,129,0.18)">80% auto</span>
+            <span class="metric-chip" style="background:rgba(16,185,129,0.08);color:#10b981;border:1px solid rgba(16,185,129,0.18)">∞ idiomas</span>
+          </div>
+          <div class="card-channels">
+            <span class="channel-tag" style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);color:#10b981">Chat</span>
+            <span class="channel-tag" style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);color:#10b981">Voz</span>
+            <span class="channel-tag" style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);color:#10b981">WhatsApp</span>
+            <span class="channel-tag" style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);color:#10b981">Email</span>
+          </div>
+          <a href="#hire" onclick="selectAgent('max')" class="card-hire-btn" style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);color:#10b981"
+            onmouseover="this.style.background='#10b981';this.style.color='#fff';this.style.borderColor='#10b981'"
+            onmouseout="this.style.background='rgba(16,185,129,0.08)';this.style.color='#10b981';this.style.borderColor='rgba(16,185,129,0.2)'">
+            <span class="es-text">Contratar MAX →</span>
+            <span class="en-text">Hire MAX →</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ARIA — Most Popular -->
+      <div class="agent-card">
+        <div class="card-stripe" style="background:linear-gradient(90deg,#ec4899,rgba(236,72,153,0.2))"></div>
+        <span class="popular-badge es-text">Más popular</span>
+        <span class="popular-badge en-text">Most popular</span>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-av" style="background:rgba(236,72,153,0.12);border:1px solid rgba(236,72,153,0.28);color:#ec4899">A</div>
+            <div>
+              <div class="card-name" style="color:#ec4899">ARIA</div>
+              <div class="card-role es-text">AI Receptionist</div>
+              <div class="card-role en-text">AI Receptionist</div>
+            </div>
+            <div class="card-price">
+              <div class="price-val" style="color:#ec4899">€3.50</div>
+              <div class="price-unit es-text">por hora</div>
+              <div class="price-unit en-text">per hour</div>
+            </div>
+          </div>
+          <div class="card-divider"></div>
+          <p class="card-tagline es-text">Atiende llamadas, agenda citas y envía recordatorios. Disponible 24/7, 0 segundos de espera.</p>
+          <p class="card-tagline en-text">Answers calls, schedules appointments, sends reminders. 24/7 available, 0 seconds wait.</p>
+          <div class="card-metrics">
+            <span class="metric-chip" style="background:rgba(236,72,153,0.08);color:#ec4899;border:1px solid rgba(236,72,153,0.18)">24/7</span>
+            <span class="metric-chip" style="background:rgba(236,72,153,0.08);color:#ec4899;border:1px solid rgba(236,72,153,0.18)">0s espera</span>
+            <span class="metric-chip" style="background:rgba(236,72,153,0.08);color:#ec4899;border:1px solid rgba(236,72,153,0.18)">Auto-confirmaciones</span>
+          </div>
+          <div class="card-channels">
+            <span class="channel-tag" style="background:rgba(236,72,153,0.07);border:1px solid rgba(236,72,153,0.18);color:#ec4899">Voz</span>
+            <span class="channel-tag" style="background:rgba(236,72,153,0.07);border:1px solid rgba(236,72,153,0.18);color:#ec4899">WhatsApp</span>
+            <span class="channel-tag" style="background:rgba(236,72,153,0.07);border:1px solid rgba(236,72,153,0.18);color:#ec4899">Email</span>
+          </div>
+          <a href="#hire" onclick="selectAgent('aria')" class="card-hire-btn" style="background:rgba(236,72,153,0.08);border:1px solid rgba(236,72,153,0.2);color:#ec4899"
+            onmouseover="this.style.background='#ec4899';this.style.color='#fff';this.style.borderColor='#ec4899'"
+            onmouseout="this.style.background='rgba(236,72,153,0.08)';this.style.color='#ec4899';this.style.borderColor='rgba(236,72,153,0.2)'">
+            <span class="es-text">Contratar ARIA →</span>
+            <span class="en-text">Hire ARIA →</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- COLE -->
+      <div class="agent-card">
+        <div class="card-stripe" style="background:linear-gradient(90deg,#f59e0b,rgba(245,158,11,0.2))"></div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-av" style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.28);color:#f59e0b">C</div>
+            <div>
+              <div class="card-name" style="color:#f59e0b">COLE</div>
+              <div class="card-role es-text">AI Operations</div>
+              <div class="card-role en-text">AI Operations</div>
+            </div>
+            <div class="card-price">
+              <div class="price-val" style="color:#f59e0b">€4.20</div>
+              <div class="price-unit es-text">por hora</div>
+              <div class="price-unit en-text">per hour</div>
+            </div>
+          </div>
+          <div class="card-divider"></div>
+          <p class="card-tagline es-text">Automatiza tareas repetitivas, reportes diarios y flujos de trabajo. 20+ integraciones.</p>
+          <p class="card-tagline en-text">Automates repetitive tasks, daily reports, and workflows. 20+ integrations.</p>
+          <div class="card-metrics">
+            <span class="metric-chip" style="background:rgba(245,158,11,0.08);color:#f59e0b;border:1px solid rgba(245,158,11,0.18)">Auto-reportes</span>
+            <span class="metric-chip" style="background:rgba(245,158,11,0.08);color:#f59e0b;border:1px solid rgba(245,158,11,0.18)">Alertas live</span>
+            <span class="metric-chip" style="background:rgba(245,158,11,0.08);color:#f59e0b;border:1px solid rgba(245,158,11,0.18)">20+ integraciones</span>
+          </div>
+          <div class="card-channels">
+            <span class="channel-tag" style="background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.18);color:#f59e0b">Slack</span>
+            <span class="channel-tag" style="background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.18);color:#f59e0b">Email</span>
+            <span class="channel-tag" style="background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.18);color:#f59e0b">Notion</span>
+            <span class="channel-tag" style="background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.18);color:#f59e0b">CRM</span>
+          </div>
+          <a href="#hire" onclick="selectAgent('cole')" class="card-hire-btn" style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);color:#f59e0b"
+            onmouseover="this.style.background='#f59e0b';this.style.color='#fff';this.style.borderColor='#f59e0b'"
+            onmouseout="this.style.background='rgba(245,158,11,0.08)';this.style.color='#f59e0b';this.style.borderColor='rgba(245,158,11,0.2)'">
+            <span class="es-text">Contratar COLE →</span>
+            <span class="en-text">Hire COLE →</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ HIRE WIDGET ══════════ -->
+<section id="hire">
+  <div class="sec-inner">
+    <div class="hire-layout">
+
+      <!-- Info column -->
+      <div>
+        <p class="hire-info-label es-text">Contratación</p>
+        <p class="hire-info-label en-text">Hiring</p>
+        <h2 class="hire-info-h2">
+          <span class="es-text">Elige horas.<br/>Tu agente, listo<br/>en <span style="background:linear-gradient(135deg,#a78bfa,var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">menos de 24h.</span></span>
+          <span class="en-text">Choose hours.<br/>Your agent live<br/>in <span style="background:linear-gradient(135deg,#a78bfa,var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">under 24h.</span></span>
+        </h2>
+        <p class="hire-info-p">
+          <span class="es-text">Las horas no caducan. Descuentos por volumen desde 20 horas. Sin contratos a largo plazo.</span>
+          <span class="en-text">Hours never expire. Volume discounts from 20 hours. No long-term contracts.</span>
+        </p>
+        <div class="hire-features">
+          <div class="hire-feat">
+            <div class="feat-icon">✓</div>
+            <div class="feat-text">
+              <span class="es-text"><strong>Descuentos por volumen:</strong> 10% en 20h, 15% en 40h, 20% en 100h</span>
+              <span class="en-text"><strong>Volume discounts:</strong> 10% at 20h, 15% at 40h, 20% at 100h</span>
+            </div>
+          </div>
+          <div class="hire-feat">
+            <div class="feat-icon">✓</div>
+            <div class="feat-text">
+              <span class="es-text"><strong>Sin caducidad:</strong> las horas compradas nunca expiran</span>
+              <span class="en-text"><strong>No expiry:</strong> purchased hours never expire</span>
+            </div>
+          </div>
+          <div class="hire-feat">
+            <div class="feat-icon">✓</div>
+            <div class="feat-text">
+              <span class="es-text"><strong>Onboarding rápido:</strong> formulario de 8 preguntas, agente activo en &lt;24h</span>
+              <span class="en-text"><strong>Fast onboarding:</strong> 8-question form, agent live in &lt;24h</span>
+            </div>
+          </div>
+          <div class="hire-feat">
+            <div class="feat-icon">✓</div>
+            <div class="feat-text">
+              <span class="es-text"><strong>Sin contrato:</strong> paga solo lo que necesitas, cuando lo necesitas</span>
+              <span class="en-text"><strong>No contract:</strong> pay only for what you need, when you need it</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Widget -->
+      <div class="hire-widget">
+
+        <p class="widget-title es-text">Calcula tu precio</p>
+        <p class="widget-title en-text">Calculate your price</p>
+        <p class="widget-sub es-text">Mínimo 2 horas · Las horas no caducan</p>
+        <p class="widget-sub en-text">Minimum 2 hours · Hours never expire</p>
+
+        <p class="widget-step-label es-text">01 — Selecciona tu agente</p>
+        <p class="widget-step-label en-text">01 — Select your agent</p>
+
+        <div class="hire-agents">
+          <button class="hire-agent-btn selected" data-agent="sara" onclick="selectAgent('sara')">
+            <div class="h-av" style="background:rgba(110,84,247,0.15);border:1px solid rgba(110,84,247,0.3);color:#6e54f7">S</div>
+            <div>
+              <div class="h-name" style="color:#6e54f7">SARA</div>
+              <div class="h-role es-text">Ventas</div>
+              <div class="h-role en-text">Sales</div>
+            </div>
+            <div class="h-price" style="color:#6e54f7">€4.90/h</div>
+          </button>
+          <button class="hire-agent-btn" data-agent="max" onclick="selectAgent('max')">
+            <div class="h-av" style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#10b981">M</div>
+            <div>
+              <div class="h-name" style="color:#10b981">MAX</div>
+              <div class="h-role es-text">Soporte</div>
+              <div class="h-role en-text">Support</div>
+            </div>
+            <div class="h-price" style="color:#10b981">€3.90/h</div>
+          </button>
+          <button class="hire-agent-btn" data-agent="aria" onclick="selectAgent('aria')">
+            <div class="h-av" style="background:rgba(236,72,153,0.15);border:1px solid rgba(236,72,153,0.3);color:#ec4899">A</div>
+            <div>
+              <div class="h-name" style="color:#ec4899">ARIA</div>
+              <div class="h-role es-text">Recepción</div>
+              <div class="h-role en-text">Reception</div>
+            </div>
+            <div class="h-price" style="color:#ec4899">€3.50/h</div>
+          </button>
+          <button class="hire-agent-btn" data-agent="cole" onclick="selectAgent('cole')">
+            <div class="h-av" style="background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);color:#f59e0b">C</div>
+            <div>
+              <div class="h-name" style="color:#f59e0b">COLE</div>
+              <div class="h-role es-text">Operaciones</div>
+              <div class="h-role en-text">Operations</div>
+            </div>
+            <div class="h-price" style="color:#f59e0b">€4.20/h</div>
+          </button>
+        </div>
+
+        <p class="widget-step-label es-text">02 — Horas a contratar</p>
+        <p class="widget-step-label en-text">02 — Hours to hire</p>
+
+        <div class="slider-wrap">
+          <div id="slider-tip" class="slider-tip" style="left:5%">10h</div>
+          <input type="range" id="hour-slider" class="hour-slider" min="2" max="200" value="10"
+                 oninput="updateHireHours(this.value)" />
+        </div>
+        <div class="slider-labs">
+          <span>2h</span><span>20h</span><span>40h</span><span>100h</span><span>200h</span>
+        </div>
+
+        <div id="discount-badge" class="discount-badge">
+          <span id="discount-text" class="es-text">Sin descuento aún — 10% desde 20h</span>
+          <span id="discount-text-en" class="en-text">No discount yet — 10% off at 20h</span>
+        </div>
+
+        <div class="hire-price-box">
+          <div>
+            <div class="price-lbl es-text">Total a pagar</div>
+            <div class="price-lbl en-text">Total to pay</div>
+            <div style="display:flex;align-items:baseline;gap:5px;margin-top:4px">
+              <span id="hire-total" class="price-total">€49</span>
+              <span id="hire-rate" class="price-per-h">€4.90/h</span>
+            </div>
+          </div>
+          <span id="hire-savings" class="price-savings" style="display:none"></span>
+        </div>
+
+        <button class="hire-cta-btn" onclick="openSetupModal()">
+          <span class="es-text">Comenzar configuración →</span>
+          <span class="en-text">Start setup →</span>
+        </button>
+        <p class="hire-note es-text">Sin contrato a largo plazo · Las horas no caducan</p>
+        <p class="hire-note en-text">No long-term contract · Hours never expire</p>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ HOW IT WORKS ══════════ -->
+<section id="how">
+  <div class="sec-inner">
+    <p class="sec-label es-text">El proceso</p>
+    <p class="sec-label en-text">The process</p>
+    <h2 class="sec-h2 es-text">De cero a operativo en 4 pasos</h2>
+    <h2 class="sec-h2 en-text">From zero to live in 4 steps</h2>
+
+    <div class="steps-wrap">
+      <div class="step-connector conn-1"></div>
+      <div class="step-connector conn-2"></div>
+      <div class="step-connector conn-3"></div>
+
+      <div class="steps-grid">
+
+        <div class="step-card">
+          <span class="step-time">⏱ 2 min</span>
+          <div class="step-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+            </svg>
+          </div>
+          <div class="step-num">01</div>
+          <div class="step-title es-text">Elige tu agente</div>
+          <div class="step-title en-text">Choose your agent</div>
+          <div class="step-desc es-text">Selecciona el agente que necesitas y el número de horas. Descuentos automáticos por volumen.</div>
+          <div class="step-desc en-text">Select the agent you need and the number of hours. Automatic volume discounts applied.</div>
+        </div>
+
+        <div class="step-card">
+          <span class="step-time">⏱ 1 min</span>
+          <div class="step-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </div>
+          <div class="step-num">02</div>
+          <div class="step-title es-text">Rellena el formulario</div>
+          <div class="step-title en-text">Fill the setup form</div>
+          <div class="step-desc es-text">8 preguntas clave sobre tu negocio. Nos da todo lo que necesitamos para configurar tu agente.</div>
+          <div class="step-desc en-text">8 key questions about your business. Gives us everything we need to configure your agent.</div>
+        </div>
+
+        <div class="step-card">
+          <span class="step-time">⏱ 5 min</span>
+          <div class="step-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+            </svg>
+          </div>
+          <div class="step-num">03</div>
+          <div class="step-title es-text">Lo configuramos todo</div>
+          <div class="step-title en-text">We configure everything</div>
+          <div class="step-desc es-text">Nuestro equipo configura y prueba tu agente con tus datos, tus canales y tu tono de voz.</div>
+          <div class="step-desc en-text">Our team configures and tests your agent with your data, channels, and brand voice.</div>
+        </div>
+
+        <div class="step-card">
+          <span class="step-time">⚡ &lt;24h</span>
+          <div class="step-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </div>
+          <div class="step-num">04</div>
+          <div class="step-title es-text">Tu agente en marcha</div>
+          <div class="step-title en-text">Your agent goes live</div>
+          <div class="step-desc es-text">Activo en menos de 24 horas. Recibes acceso al dashboard con métricas en tiempo real.</div>
+          <div class="step-desc en-text">Live in under 24 hours. You get dashboard access with real-time metrics.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ REVIEWS ══════════ -->
+<section id="reviews">
+  <div class="sec-inner">
+    <div class="rating-summary">
+      <div class="rating-big">4.9 / 5.0</div>
+      <div class="rating-stars">★★★★★</div>
+      <div class="rating-count es-text">Basado en 47 opiniones verificadas</div>
+      <div class="rating-count en-text">Based on 47 verified reviews</div>
+    </div>
+
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text es-text">"Sara cualificó más de 300 leads en su primera semana. Nuestro equipo comercial nunca había tenido tanto donde elegir."</p>
+        <p class="review-text en-text">"Sara qualified over 300 leads in her first week. Our sales team never had so much to choose from."</p>
+        <div class="review-author">
+          <div class="review-av">M</div>
+          <div>
+            <div class="rev-name">Marta L.</div>
+            <div class="rev-title es-text">Directora de Ventas</div>
+            <div class="rev-title en-text">Sales Director</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text es-text">"Max resuelve el 80% de los tickets antes de que nosotros los veamos. Los clientes ni notan que es IA."</p>
+        <p class="review-text en-text">"Max resolves 80% of tickets before we even see them. Customers don't even notice it's AI."</p>
+        <div class="review-author">
+          <div class="review-av">J</div>
+          <div>
+            <div class="rev-name">Javier R.</div>
+            <div class="rev-title es-text">CEO, Startup Tech</div>
+            <div class="rev-title en-text">CEO, Tech Startup</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text es-text">"Aria ha transformado nuestra recepción. Cero llamadas perdidas, cero esperas. Nuestros pacientes están encantados."</p>
+        <p class="review-text en-text">"Aria has transformed our reception. Zero missed calls, zero waiting. Our patients absolutely love it."</p>
+        <div class="review-author">
+          <div class="review-av">A</div>
+          <div>
+            <div class="rev-name">Dra. Ana C.</div>
+            <div class="rev-title es-text">Clínica Dental</div>
+            <div class="rev-title en-text">Dental Clinic</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text es-text">"Cole nos manda un reporte cada mañana a las 9. Detectamos un error de facturación que habríamos tardado semanas en ver. Vale cada euro."</p>
+        <p class="review-text en-text">"Cole sends us a daily ops report every morning at 9am. We spotted a billing issue we'd have missed for weeks. Worth every euro."</p>
+        <div class="review-author">
+          <div class="review-av">C</div>
+          <div>
+            <div class="rev-name">Carlos M.</div>
+            <div class="rev-title es-text">Dueño de Restaurante</div>
+            <div class="rev-title en-text">Restaurant Owner</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CTA ══════════ -->
+<section id="cta">
+  <div class="cta-blob"></div>
+  <div class="sec-inner">
+    <div class="cta-inner">
+      <p class="cta-label es-text">Empieza hoy</p>
+      <p class="cta-label en-text">Start today</p>
+      <h2 class="cta-h2">
+        <span class="es-text">¿Listo para tu<br/>primer agente de IA?</span>
+        <span class="en-text">Ready for your<br/>first AI employee?</span>
+      </h2>
+      <p class="cta-sub">
+        <span class="es-text">30 minutos. Sin compromiso. Tu agente está trabajando en menos de 24 horas.</span>
+        <span class="en-text">30 minutes. No commitment. Your agent is working in under 24 hours.</span>
+      </p>
+      <div class="cta-checks">
+        <div class="cta-check">
+          <div class="check-icon">✓</div>
+          <span class="es-text">Sin contratos a largo plazo</span>
+          <span class="en-text">No long-term contracts</span>
+        </div>
+        <div class="cta-check">
+          <div class="check-icon">✓</div>
+          <span class="es-text">Las horas no caducan</span>
+          <span class="en-text">Hours never expire</span>
+        </div>
+        <div class="cta-check">
+          <div class="check-icon">✓</div>
+          <span class="es-text">En marcha en menos de 24h</span>
+          <span class="en-text">Live in under 24 hours</span>
+        </div>
+      </div>
+      <div class="cta-btns">
+        <button class="btn-primary" onclick="openSetupModal()">
+          <span class="es-text">Contratar ahora →</span>
+          <span class="en-text">Hire now →</span>
+        </button>
+        <a href="#agents" class="btn-secondary">
+          <span class="es-text">Ver agentes</span>
+          <span class="en-text">Browse agents</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <p class="footer-tagline es-text">Empleados de IA para el mundo real. Contrata por horas, sin contratos, listos en 24h.</p>
+      <p class="footer-tagline en-text">AI employees for the real world. Hire by the hour, no contracts, live in 24h.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-icon" aria-label="X / Twitter">𝕏</a>
+        <a href="#" class="social-icon" aria-label="LinkedIn">in</a>
+        <a href="#" class="social-icon" aria-label="Instagram">◎</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <a href="#hero" class="footer-logo">
+        KREW
+        <span class="footer-logo-dot"></span>
+      </a>
+      <nav class="footer-links">
+        <a href="#agents" class="es-text">Agentes</a>
+        <a href="#agents" class="en-text">Agents</a>
+        <a href="#hire" class="es-text">Contratar</a>
+        <a href="#hire" class="en-text">Hire</a>
+        <a href="#how" class="es-text">Cómo funciona</a>
+        <a href="#how" class="en-text">How it Works</a>
+        <a href="mailto:hola@krew.ai">hola@krew.ai</a>
+      </nav>
+      <div>
+        <span class="status-dot"></span>
+        <span style="font-size:12px;color:#34d399" class="es-text">Sistemas operativos</span>
+        <span style="font-size:12px;color:#34d399" class="en-text">All systems operational</span>
+        <span class="footer-copy" style="display:block;margin-top:4px">© 2025 Krew</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════ SETUP MODAL ══════════ -->
+<div id="setup-modal" class="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeSetupModal()">×</button>
+    <h2 class="modal-h es-text">Configuración de tu agente</h2>
+    <h2 class="modal-h en-text">Agent setup</h2>
+    <p class="modal-sub es-text">8 preguntas rápidas · Tu agente listo en &lt;24h</p>
+    <p class="modal-sub en-text">8 quick questions · Your agent live in &lt;24h</p>
+    <form onsubmit="submitSetup(event)">
+      <div class="form-field">
+        <label class="es-text">Nombre del negocio</label>
+        <label class="en-text">Business name</label>
+        <input type="text" required placeholder="Ej: Clínica Dental López" />
+      </div>
+      <div class="form-field">
+        <label class="es-text">Sector</label>
+        <label class="en-text">Industry</label>
+        <select>
+          <option value="" class="es-text">Selecciona tu sector</option>
+          <option class="es-text">Clínica / Salud</option>
+          <option class="es-text">Legal / Consultoría</option>
+          <option class="es-text">E-commerce</option>
+          <option class="es-text">Restaurante</option>
+          <option class="es-text">Inmobiliaria</option>
+          <option class="es-text">Agencia / SaaS</option>
+          <option class="es-text">Otro</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label class="es-text">Agente seleccionado</label>
+        <label class="en-text">Selected agent</label>
+        <input type="text" id="modal-agent-display" readonly style="opacity:0.6;cursor:default" />
+      </div>
+      <div class="form-field">
+        <label class="es-text">Horas contratadas</label>
+        <label class="en-text">Hours ordered</label>
+        <input type="text" id="modal-hours-display" readonly style="opacity:0.6;cursor:default" />
+      </div>
+      <div class="form-field">
+        <label class="es-text">Interacciones diarias aprox.</label>
+        <label class="en-text">Approx. daily interactions</label>
+        <select>
+          <option>&lt;50</option>
+          <option>50–200</option>
+          <option>200–500</option>
+          <option>500+</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label class="es-text">Canal principal</label>
+        <label class="en-text">Primary channel</label>
+        <select>
+          <option>WhatsApp</option>
+          <option class="es-text">Voz / Teléfono</option>
+          <option class="en-text">Voice / Phone</option>
+          <option>Email</option>
+          <option>Chat web</option>
+          <option>Slack</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label class="es-text">Horario de atención</label>
+        <label class="en-text">Business hours</label>
+        <select>
+          <option class="es-text">Lunes–Viernes 9–18h</option>
+          <option class="es-text">Lunes–Sábado 9–21h</option>
+          <option class="es-text">24/7 sin parar</option>
+          <option class="es-text">Personalizado</option>
+          <option class="en-text">Mon–Fri 9am–6pm</option>
+          <option class="en-text">Mon–Sat 9am–9pm</option>
+          <option class="en-text">24/7 non-stop</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label class="es-text">Email de contacto</label>
+        <label class="en-text">Contact email</label>
+        <input type="email" required placeholder="tu@empresa.com" />
+      </div>
+      <button type="submit" class="modal-submit">
+        <span class="es-text">Enviar y comenzar →</span>
+        <span class="en-text">Submit and start →</span>
+      </button>
+      <p class="modal-note es-text">Te contactamos en menos de 2 horas · Sin compromiso</p>
+      <p class="modal-note en-text">We'll reach out in under 2 hours · No commitment</p>
+    </form>
+  </div>
+</div>
+
+<script>
+/* ── STATE ── */
+const RATES = { sara:4.90, max:3.90, aria:3.50, cole:4.20 };
+const AGENT_NAMES = { sara:'SARA', max:'MAX', aria:'ARIA', cole:'COLE' };
+let currentAgent = 'sara';
+let currentHours = 10;
+let prevDiscount = 0;
+
+/* ── SCROLL PROGRESS ── */
+window.addEventListener('scroll', () => {
+  const p = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  document.getElementById('scroll-progress').style.transform = 'scaleX(' + p + ')';
+}, { passive: true });
+
+/* ── ANNOUNCE BAR ── */
+function dismissAnnounce() {
+  document.getElementById('announce-bar').style.display = 'none';
+}
+
+/* ── LANG TOGGLE ── */
+function toggleLang() {
+  document.body.classList.toggle('lang-es');
+  const isEs = document.body.classList.contains('lang-es');
+  document.getElementById('lang-btn').textContent = isEs ? 'EN' : 'ES';
+}
+
+/* ── AGENT SELECT ── */
+function selectAgent(id) {
+  currentAgent = id;
+  document.querySelectorAll('.hire-agent-btn').forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.agent === id);
+  });
+  // Pulse animation
+  const btn = document.querySelector('[data-agent="' + id + '"]');
+  if (btn && btn.animate) {
+    btn.animate(
+      [{transform:'scale(1)'},{transform:'scale(1.05)'},{transform:'scale(1)'}],
+      {duration:300, easing:'ease'}
+    );
+  }
+  updateTotal();
+}
+
+/* ── HOURS SLIDER ── */
+function updateHireHours(val) {
+  currentHours = parseInt(val);
+  updateSlider();
+  updateTotal();
+}
+
+function updateSlider() {
+  const slider = document.getElementById('hour-slider');
+  const tip = document.getElementById('slider-tip');
+  const min = 2, max = 200;
+  const pct = ((currentHours - min) / (max - min)) * 100;
+  const thumbOffset = pct * 0.9 + 5; // adjust for thumb width
+  slider.style.setProperty('--pct', pct.toFixed(1) + '%');
+  tip.style.left = thumbOffset.toFixed(1) + '%';
+  tip.textContent = currentHours + 'h';
+}
+
+/* ── TOTAL CALCULATION ── */
+function getDiscount() {
+  if (currentHours >= 100) return 0.20;
+  if (currentHours >= 40)  return 0.15;
+  if (currentHours >= 20)  return 0.10;
+  return 0;
+}
+
+function updateTotal() {
+  const rate = RATES[currentAgent];
+  const discount = getDiscount();
+  const gross = rate * currentHours;
+  const total = gross * (1 - discount);
+  const savings = gross - total;
+
+  document.getElementById('hire-total').textContent = '€' + Math.round(total);
+  document.getElementById('hire-rate').textContent = '€' + rate.toFixed(2) + '/h';
+
+  const badge = document.getElementById('discount-badge');
+  const dtEs = document.getElementById('discount-text');
+  const dtEn = document.getElementById('discount-text-en');
+
+  if (discount > 0) {
+    const pct = Math.round(discount * 100);
+    dtEs.textContent = pct + '% de descuento aplicado — ahorras €' + savings.toFixed(0);
+    dtEn.textContent = pct + '% off applied — you save €' + savings.toFixed(0);
+    badge.classList.add('active');
+    if (discount !== prevDiscount) {
+      badge.classList.remove('flash');
+      void badge.offsetWidth;
+      badge.classList.add('flash');
+    }
+    const savingsEl = document.getElementById('hire-savings');
+    savingsEl.textContent = '-€' + savings.toFixed(0);
+    savingsEl.style.display = '';
+  } else {
+    dtEs.textContent = 'Sin descuento aún — 10% desde 20h';
+    dtEn.textContent = 'No discount yet — 10% off at 20h';
+    badge.classList.remove('active');
+    document.getElementById('hire-savings').style.display = 'none';
+  }
+  prevDiscount = discount;
+}
+
+/* ── MODAL ── */
+function openSetupModal() {
+  document.getElementById('modal-agent-display').value = AGENT_NAMES[currentAgent] + ' (' + RATES[currentAgent].toFixed(2) + '€/h)';
+  document.getElementById('modal-hours-display').value = currentHours + ' horas — €' + Math.round(RATES[currentAgent] * currentHours * (1 - getDiscount()));
+  document.getElementById('setup-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSetupModal() {
+  document.getElementById('setup-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('setup-modal')) closeSetupModal();
+}
+function submitSetup(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.modal-submit');
+  btn.textContent = '✓ ¡Enviado! Te contactamos pronto.';
+  btn.style.background = 'linear-gradient(135deg,#10b981,#059669)';
+  btn.disabled = true;
+  setTimeout(() => closeSetupModal(), 2200);
+}
+
+/* ── PILLS STAGGER ── */
+function initPills() {
+  document.querySelectorAll('.agent-pill').forEach((pill) => {
+    const delay = parseFloat(pill.style.transitionDelay) || 0;
+    setTimeout(() => pill.classList.add('visible'), delay * 1000);
+  });
+}
+
+/* ── STEP CARDS OBSERVER ── */
+function initStepObserver() {
+  const grid = document.querySelector('.steps-grid');
+  if (!grid) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.step-card').forEach((card, i) => {
+          setTimeout(() => card.classList.add('visible'), i * 150);
+        });
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  obs.observe(grid);
+}
+
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded', () => {
+  initPills();
+  initStepObserver();
+  selectAgent('sara');
+  updateHireHours(10);
+});
+</script>
+</body>
+</html>
