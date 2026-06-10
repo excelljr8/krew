@@ -60,14 +60,22 @@ export default function AgentCard({ agent, index = 0 }) {
                     <span style={{ color: agent.color, fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '20px', lineHeight: 1 }}>
                       {agent.name}
                     </span>
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: agent.color, flexShrink: 0 }} />
                   </div>
                   <p style={{ color: '#475569', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: '3px' }}>
                     {agent.role[lang]}
                   </p>
                 </div>
               </div>
-              <div style={{ textAlign: 'right', flexShrink: 0 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px', flexShrink: 0 }}>
+                <span style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '4px',
+                  fontSize: '10px', padding: '3px 8px', borderRadius: '99px',
+                  background: 'rgba(52,211,153,0.1)', border: '1px solid rgba(52,211,153,0.2)',
+                  color: '#34D399', fontWeight: 600,
+                }}>
+                  <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#34D399', animation: 'pulse 2s ease-in-out infinite' }} />
+                  ACTIVO
+                </span>
                 <div style={{ color: '#F1F5F9', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '17px', lineHeight: 1 }}>
                   {agent.monthly[lang]}
                 </div>

@@ -13,6 +13,15 @@ const stats = [
   { value: '80%', label: 'tickets auto-resueltos' },
 ]
 
+const industries = [
+  { icon: '🏥', name: 'Clínicas & Salud',     agents: ['ARIA', 'MAX'],  colorRgb: '244,114,182', desc: 'Citas, recordatorios y soporte continuo' },
+  { icon: '⚖️', name: 'Legal & Consultoría',  agents: ['SARA', 'COLE'], colorRgb: '99,102,241',  desc: 'Prospección y operaciones automatizadas' },
+  { icon: '🛍️', name: 'E-commerce',           agents: ['MAX', 'COLE'],  colorRgb: '34,211,238',  desc: 'Soporte 24/7 y operaciones sin parar' },
+  { icon: '🏢', name: 'Agencias & SaaS',      agents: ['SARA', 'COLE'], colorRgb: '52,211,153',  desc: 'Pipeline automático y reportes en vivo' },
+  { icon: '🍽️', name: 'Restaurantes',         agents: ['ARIA', 'MAX'],  colorRgb: '251,191,36',  desc: 'Reservas y atención al instante' },
+  { icon: '🏡', name: 'Real Estate',          agents: ['SARA', 'ARIA'], colorRgb: '129,140,248', desc: 'Leads cualificados y citas coordinadas' },
+]
+
 export default function Home() {
   const { t } = useTranslation()
 
@@ -21,9 +30,9 @@ export default function Home() {
       <Hero />
 
       {/* Stats trust bar */}
-      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.015)' }}>
+      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.01)' }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-14">
-          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'stretch', justifyContent: 'space-between' }}>
             {stats.map((s, i) => (
               <motion.div
                 key={s.label}
@@ -33,11 +42,16 @@ export default function Home() {
                 transition={{ duration: 0.4, delay: i * 0.07 }}
                 style={{
                   flex: '1 1 0', minWidth: '120px',
-                  padding: '28px 20px', textAlign: 'center',
+                  padding: '32px 20px', textAlign: 'center',
                   borderRight: i < stats.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+                  position: 'relative',
                 }}
               >
-                <div className="display font-extrabold" style={{ fontSize: '28px', color: '#F1F5F9', letterSpacing: '-0.02em', lineHeight: 1, marginBottom: '4px' }}>
+                <div className="display font-extrabold" style={{
+                  fontSize: '30px', letterSpacing: '-0.03em', lineHeight: 1, marginBottom: '6px',
+                  background: 'linear-gradient(135deg, #F1F5F9 60%, #818CF8 100%)',
+                  WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+                }}>
                   {s.value}
                 </div>
                 <div style={{ fontSize: '12px', color: '#475569' }}>{s.label}</div>
@@ -88,6 +102,76 @@ export default function Home() {
       </section>
 
       <HowItWorks />
+
+      {/* Industries */}
+      <section style={{ padding: '112px 0', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-14">
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            style={{ marginBottom: '60px' }}
+          >
+            <p style={{ fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'monospace', color: '#475569', marginBottom: '12px' }}>
+              Sectores
+            </p>
+            <h2 className="display font-extrabold" style={{ fontSize: 'clamp(32px, 4vw, 52px)', letterSpacing: '-0.03em', lineHeight: 1, color: '#F1F5F9', maxWidth: '18ch' }}>
+              Adaptado a tu sector
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {industries.map((ind, i) => (
+              <motion.div
+                key={ind.name}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.45, delay: i * 0.06 }}
+                style={{
+                  background: '#0f172a',
+                  border: '1px solid rgba(255,255,255,0.07)',
+                  borderRadius: '14px',
+                  padding: '24px',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = `rgba(${ind.colorRgb},0.3)`; e.currentTarget.style.background = '#111827' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.background = '#0f172a' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                  <span style={{
+                    fontSize: '24px', width: '44px', height: '44px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: `rgba(${ind.colorRgb}, 0.08)`,
+                    borderRadius: '11px',
+                    flexShrink: 0,
+                  }}>
+                    {ind.icon}
+                  </span>
+                  <div>
+                    <p style={{ color: '#F1F5F9', fontWeight: 600, fontSize: '15px', lineHeight: 1.2 }}>{ind.name}</p>
+                    <p style={{ color: '#475569', fontSize: '12px', marginTop: '2px' }}>{ind.desc}</p>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
+                  {ind.agents.map(name => (
+                    <span key={name} style={{
+                      fontSize: '10px', padding: '2px 8px', borderRadius: '99px',
+                      background: `rgba(${ind.colorRgb}, 0.08)`,
+                      border: `1px solid rgba(${ind.colorRgb}, 0.2)`,
+                      color: `rgb(${ind.colorRgb})`, fontWeight: 600, fontFamily: 'monospace',
+                    }}>
+                      {name}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Final CTA */}
       <section style={{ padding: '128px 0', position: 'relative', overflow: 'hidden' }}>

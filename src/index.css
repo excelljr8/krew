@@ -34,3 +34,20 @@ body {
 #root { min-height: 100vh; }
 .display { font-family: 'Syne', sans-serif; }
 .rule { border-top: 1px solid var(--b1); }
+
+::selection { background: rgba(99,102,241,0.3); color: #F1F5F9; }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.25); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(99,102,241,0.45); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}

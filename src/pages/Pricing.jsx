@@ -50,16 +50,32 @@ export default function Pricing() {
               transition={{ duration: 0.45, delay: i * 0.08 }}
               style={{
                 background: '#0f172a',
-                border: `1px solid rgba(${agent.colorRgb}, 0.18)`,
+                border: `1px solid rgba(${agent.colorRgb}, ${agent.id === 'max' ? '0.35' : '0.18'})`,
                 borderRadius: '16px', overflow: 'hidden',
                 display: 'flex', flexDirection: 'column',
                 transition: 'border-color 0.2s',
+                position: 'relative',
               }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = `rgba(${agent.colorRgb}, 0.4)`)}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = `rgba(${agent.colorRgb}, 0.18)`)}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = `rgba(${agent.colorRgb}, 0.55)`)}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = `rgba(${agent.colorRgb}, ${agent.id === 'max' ? '0.35' : '0.18'})`)}
             >
               {/* Colored top strip */}
               <div style={{ height: '3px', background: `linear-gradient(90deg, ${agent.color}, rgba(${agent.colorRgb}, 0.15))` }} />
+
+              {/* Most popular badge */}
+              {agent.id === 'max' && (
+                <div style={{ position: 'absolute', top: '16px', right: '16px' }}>
+                  <span style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '4px',
+                    fontSize: '10px', padding: '3px 9px', borderRadius: '99px',
+                    background: `rgba(${agent.colorRgb}, 0.12)`,
+                    border: `1px solid rgba(${agent.colorRgb}, 0.35)`,
+                    color: agent.color, fontWeight: 700, letterSpacing: '0.04em',
+                  }}>
+                    ★ MÁS POPULAR
+                  </span>
+                </div>
+              )}
 
               <div style={{ padding: '28px 32px 32px', display: 'flex', flexDirection: 'column', flex: 1 }}>
                 {/* Agent header */}

@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { agents } from '../data/agents'
@@ -9,46 +10,67 @@ const rise = (delay = 0) => ({
   transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
 })
 
-const activityItems = [
-  { agentId: 'sara', action: 'Lead calificado', detail: 'María García · hace 2m' },
-  { agentId: 'max',  action: 'Ticket #847 resuelto', detail: 'Respuesta en 8s · hace 1m' },
-  { agentId: 'aria', action: 'Cita confirmada', detail: 'Dr. López · 4:30 PM' },
-  { agentId: 'cole', action: 'Reporte Q2 generado', detail: 'Ventas · ahora mismo' },
+const allActivities = [
+  { agentId: 'sara', action: 'Lead calificado',       detail: 'María García · hace 2m' },
+  { agentId: 'max',  action: 'Ticket #847 resuelto',  detail: 'Respuesta en 8s · hace 1m' },
+  { agentId: 'aria', action: 'Cita confirmada',       detail: 'Dr. López · 4:30 PM hoy' },
+  { agentId: 'cole', action: 'Reporte Q2 generado',   detail: 'Ventas · ahora mismo' },
+  { agentId: 'sara', action: 'Email automatizado',    detail: 'Carlos R. · hace 30s' },
+  { agentId: 'max',  action: 'Chat resuelto',         detail: 'Web · resp. en <5s' },
+  { agentId: 'aria', action: 'Llamada gestionada',    detail: 'Nueva cita confirmada' },
+  { agentId: 'cole', action: 'Alerta procesada',      detail: 'Stock bajo → Slack' },
 ]
 
 export default function Hero() {
   const { t } = useTranslation()
+  const uidRef = useRef(allActivities.length)
+  const idxRef = useRef(allActivities.length)
+
+  const [items, setItems] = useState(() =>
+    allActivities.slice(0, 4).map((a, i) => ({ ...a, uid: i }))
+  )
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      const next = allActivities[idxRef.current % allActivities.length]
+      const item = { ...next, uid: uidRef.current }
+      idxRef.current++
+      uidRef.current++
+      setItems(prev => [item, ...prev.slice(0, 3)])
+    }, 2800)
+    return () => clearInterval(id)
+  }, [])
 
   return (
     <section
       style={{ minHeight: '100vh', paddingTop: '64px', borderBottom: '1px solid rgba(255,255,255,0.07)', position: 'relative', overflow: 'hidden' }}
     >
-      {/* Background orbs */}
+      {/* Background */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} aria-hidden="true">
         <div style={{
-          position: 'absolute', width: '800px', height: '800px', borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 65%)',
-          top: '-250px', left: '-200px',
+          position: 'absolute', width: '900px', height: '900px', borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(99,102,241,0.13) 0%, transparent 60%)',
+          top: '-300px', left: '-250px',
         }} />
         <div style={{
-          position: 'absolute', width: '500px', height: '500px', borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(34,211,238,0.06) 0%, transparent 65%)',
-          bottom: '-80px', right: '10%',
+          position: 'absolute', width: '600px', height: '600px', borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(34,211,238,0.07) 0%, transparent 65%)',
+          bottom: '-100px', right: '5%',
         }} />
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.028) 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px)',
           backgroundSize: '36px 36px',
-          WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 40% 40%, black 10%, transparent 75%)',
-          maskImage: 'radial-gradient(ellipse 70% 60% at 40% 40%, black 10%, transparent 75%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 70% 65% at 40% 40%, black 10%, transparent 75%)',
+          maskImage: 'radial-gradient(ellipse 70% 65% at 40% 40%, black 10%, transparent 75%)',
         }} />
       </div>
 
       <div
         className="max-w-7xl mx-auto px-6 lg:px-14 w-full"
-        style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', minHeight: 'calc(100vh - 64px)', gap: '64px', paddingTop: '80px', paddingBottom: '80px' }}
+        style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', minHeight: 'calc(100vh - 64px)', gap: '72px', paddingTop: '80px', paddingBottom: '80px' }}
       >
-        {/* ── LEFT SIDE ── */}
+        {/* ── LEFT ── */}
         <div style={{ flex: '1 1 0', minWidth: 0 }}>
 
           {/* Badge */}
@@ -143,115 +165,135 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* ── RIGHT SIDE — Live Activity Panel ── */}
+        {/* ── RIGHT — Animated Live Activity Panel ── */}
         <motion.div
           initial={{ opacity: 0, x: 24 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className="hidden lg:block"
-          style={{ flex: '0 0 380px', width: '380px' }}
+          style={{ flex: '0 0 390px', width: '390px' }}
         >
           <div style={{
-            background: '#0f172a',
+            background: '#0b1220',
             border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: '20px',
             overflow: 'hidden',
-            boxShadow: '0 32px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)',
+            boxShadow: '0 40px 100px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04)',
           }}>
+            {/* Window bar */}
+            <div style={{
+              padding: '12px 16px',
+              borderBottom: '1px solid rgba(255,255,255,0.06)',
+              display: 'flex', alignItems: 'center', gap: '6px',
+              background: 'rgba(255,255,255,0.015)',
+            }}>
+              <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'inline-block' }} />
+              <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'inline-block' }} />
+              <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'inline-block' }} />
+              <span style={{ flex: 1, textAlign: 'center', fontSize: '11px', color: '#334155', fontFamily: 'monospace' }}>krew.ai — dashboard</span>
+            </div>
+
             {/* Panel header */}
             <div style={{
-              padding: '16px 20px',
-              borderBottom: '1px solid rgba(255,255,255,0.07)',
+              padding: '14px 18px',
+              borderBottom: '1px solid rgba(255,255,255,0.06)',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              background: 'rgba(255,255,255,0.02)',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#34D399', boxShadow: '0 0 8px rgba(52,211,153,0.7)', display: 'inline-block', animation: 'pulse 2s ease-in-out infinite' }} />
-                <span style={{ color: '#94A3B8', fontSize: '13px', fontWeight: 500 }}>Actividad en tiempo real</span>
+                <span style={{
+                  width: '8px', height: '8px', borderRadius: '50%',
+                  background: '#34D399', boxShadow: '0 0 10px rgba(52,211,153,0.8)',
+                  display: 'inline-block', animation: 'pulse 2s ease-in-out infinite',
+                }} />
+                <span style={{ color: '#94A3B8', fontSize: '12px', fontWeight: 500, fontFamily: 'monospace' }}>actividad en tiempo real</span>
               </div>
               <span style={{
-                fontSize: '11px', padding: '3px 8px', borderRadius: '99px',
-                background: 'rgba(52,211,153,0.1)', border: '1px solid rgba(52,211,153,0.25)',
-                color: '#34D399', fontWeight: 500,
+                fontSize: '10px', padding: '2px 8px', borderRadius: '99px',
+                background: 'rgba(52,211,153,0.1)', border: '1px solid rgba(52,211,153,0.22)',
+                color: '#34D399', fontWeight: 600, fontFamily: 'monospace',
               }}>4 activos</span>
             </div>
 
-            {/* Activity items */}
-            <div style={{ padding: '12px' }}>
-              {activityItems.map((item, i) => {
-                const agent = agents.find(a => a.id === item.agentId)
-                return (
-                  <motion.div
-                    key={item.agentId}
-                    initial={{ opacity: 0, x: 16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.5 + i * 0.1 }}
-                    style={{
-                      display: 'flex', alignItems: 'center', gap: '12px',
-                      padding: '12px 14px', borderRadius: '12px',
-                      marginBottom: i < activityItems.length - 1 ? '6px' : 0,
-                      background: `rgba(${agent.colorRgb}, 0.05)`,
-                      border: `1px solid rgba(${agent.colorRgb}, 0.12)`,
-                      transition: 'all 0.2s',
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.background = `rgba(${agent.colorRgb}, 0.1)`; e.currentTarget.style.borderColor = `rgba(${agent.colorRgb}, 0.25)` }}
-                    onMouseLeave={e => { e.currentTarget.style.background = `rgba(${agent.colorRgb}, 0.05)`; e.currentTarget.style.borderColor = `rgba(${agent.colorRgb}, 0.12)` }}
-                  >
-                    {/* Avatar */}
-                    <div style={{
-                      width: '36px', height: '36px', borderRadius: '10px', flexShrink: 0,
-                      background: `rgba(${agent.colorRgb}, 0.15)`,
-                      border: `1px solid rgba(${agent.colorRgb}, 0.3)`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: agent.color, fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '14px',
-                    }}>
-                      {agent.initial}
-                    </div>
-                    {/* Text */}
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '2px' }}>
-                        <span style={{ color: agent.color, fontWeight: 700, fontSize: '13px', fontFamily: 'Syne, sans-serif' }}>
-                          {agent.name}
-                        </span>
-                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: agent.color, flexShrink: 0, opacity: 0.8 }} />
+            {/* Animated activity items */}
+            <div style={{ padding: '10px 10px', minHeight: '292px', overflow: 'hidden' }}>
+              <AnimatePresence initial={false}>
+                {items.map((item) => {
+                  const agent = agents.find(a => a.id === item.agentId)
+                  return (
+                    <motion.div
+                      key={item.uid}
+                      initial={{ opacity: 0, y: -18, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.97 }}
+                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '11px',
+                        padding: '11px 13px', borderRadius: '11px',
+                        marginBottom: '6px',
+                        background: `rgba(${agent.colorRgb}, 0.05)`,
+                        border: `1px solid rgba(${agent.colorRgb}, 0.12)`,
+                      }}
+                    >
+                      <div style={{
+                        width: '34px', height: '34px', borderRadius: '9px', flexShrink: 0,
+                        background: `rgba(${agent.colorRgb}, 0.15)`,
+                        border: `1px solid rgba(${agent.colorRgb}, 0.3)`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        color: agent.color, fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '13px',
+                      }}>
+                        {agent.initial}
                       </div>
-                      <p style={{ color: '#94A3B8', fontSize: '13px', margin: 0, lineHeight: 1.3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {item.action}
-                      </p>
-                      <p style={{ color: '#334155', fontSize: '11px', margin: '2px 0 0', lineHeight: 1 }}>
-                        {item.detail}
-                      </p>
-                    </div>
-                  </motion.div>
-                )
-              })}
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '2px' }}>
+                          <span style={{ color: agent.color, fontWeight: 700, fontSize: '12px', fontFamily: 'Syne, sans-serif' }}>
+                            {agent.name}
+                          </span>
+                          <span style={{
+                            width: '5px', height: '5px', borderRadius: '50%',
+                            background: agent.color, flexShrink: 0, opacity: 0.9,
+                            animation: 'pulse 2s ease-in-out infinite',
+                          }} />
+                        </div>
+                        <p style={{ color: '#94A3B8', fontSize: '12px', margin: 0, lineHeight: 1.35, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {item.action}
+                        </p>
+                        <p style={{ color: '#334155', fontSize: '10px', margin: '2px 0 0', lineHeight: 1, fontFamily: 'monospace' }}>
+                          {item.detail}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )
+                })}
+              </AnimatePresence>
             </div>
 
             {/* Footer */}
             <div style={{
-              padding: '14px 20px',
-              borderTop: '1px solid rgba(255,255,255,0.06)',
-              display: 'flex', alignItems: 'center', gap: '8px',
+              padding: '12px 18px',
+              borderTop: '1px solid rgba(255,255,255,0.05)',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
-              <div style={{ display: 'flex', gap: '-4px' }}>
-                {agents.map((a, i) => (
-                  <div key={a.id} style={{
-                    width: '22px', height: '22px', borderRadius: '50%',
-                    background: `rgba(${a.colorRgb}, 0.2)`,
-                    border: `2px solid #0f172a`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    marginLeft: i > 0 ? '-6px' : 0,
-                    color: a.color, fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '9px',
-                  }}>
-                    {a.initial}
-                  </div>
-                ))}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ display: 'flex' }}>
+                  {agents.map((a, i) => (
+                    <div key={a.id} style={{
+                      width: '22px', height: '22px', borderRadius: '50%',
+                      background: `rgba(${a.colorRgb}, 0.2)`,
+                      border: `2px solid #0b1220`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      marginLeft: i > 0 ? '-6px' : 0,
+                      color: a.color, fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '8px',
+                    }}>
+                      {a.initial}
+                    </div>
+                  ))}
+                </div>
+                <span style={{ fontSize: '11px', color: '#475569' }}>Todos operativos</span>
               </div>
-              <span style={{ fontSize: '12px', color: '#475569' }}>Todos los agentes operativos</span>
+              <span style={{ fontSize: '10px', color: '#22D3EE', fontFamily: 'monospace', opacity: 0.7 }}>live ●</span>
             </div>
           </div>
         </motion.div>
-
       </div>
     </section>
   )
