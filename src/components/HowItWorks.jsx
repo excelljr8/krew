@@ -90,36 +90,51 @@ export default function HowItWorks() {
                   display: 'flex',
                   flexDirection: 'column',
                   transition: 'border-color 0.2s, transform 0.2s',
+                  position: 'relative',
+                  overflow: 'hidden',
                 }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(99,102,241,0.3)'; e.currentTarget.style.transform = 'translateY(-3px)' }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.transform = 'none' }}
               >
-                {/* Step number + icon */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '28px' }}>
-                  <div style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    width: '40px', height: '40px', borderRadius: '12px',
-                    background: 'rgba(99,102,241,0.1)',
-                    border: '1px solid rgba(99,102,241,0.22)',
-                    color: '#818CF8',
-                    flexShrink: 0,
-                  }}>
-                    {stepIcons[i]}
-                  </div>
-                  <span style={{
-                    fontFamily: 'monospace', fontSize: '11px', color: '#334155',
-                    fontWeight: 600, letterSpacing: '0.08em',
-                  }}>
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
+                {/* Ghost step number */}
+                <div style={{
+                  position: 'absolute', top: '-8px', right: '16px',
+                  fontFamily: 'Syne, sans-serif', fontWeight: 800,
+                  fontSize: '88px', lineHeight: 1, color: 'rgba(99,102,241,0.04)',
+                  letterSpacing: '-0.05em', userSelect: 'none', pointerEvents: 'none',
+                  zIndex: 0,
+                }}>
+                  {String(i + 1).padStart(2, '0')}
                 </div>
 
-                <p style={{ color: '#F1F5F9', fontWeight: 600, fontSize: '15px', marginBottom: '10px', lineHeight: 1.35 }}>
-                  {step.title}
-                </p>
-                <p style={{ color: '#64748B', fontSize: '14px', lineHeight: '1.65', flex: 1 }}>
-                  {step.desc}
-                </p>
+                {/* Step icon */}
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '28px' }}>
+                    <div style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      width: '44px', height: '44px', borderRadius: '12px',
+                      background: 'rgba(99,102,241,0.1)',
+                      border: '1px solid rgba(99,102,241,0.22)',
+                      color: '#818CF8',
+                      flexShrink: 0,
+                    }}>
+                      {stepIcons[i]}
+                    </div>
+                    <span style={{
+                      fontFamily: 'monospace', fontSize: '11px', color: '#334155',
+                      fontWeight: 600, letterSpacing: '0.08em',
+                    }}>
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                  </div>
+
+                  <p style={{ color: '#F1F5F9', fontWeight: 600, fontSize: '15px', marginBottom: '10px', lineHeight: 1.35 }}>
+                    {step.title}
+                  </p>
+                  <p style={{ color: '#64748B', fontSize: '14px', lineHeight: '1.65', flex: 1 }}>
+                    {step.desc}
+                  </p>
+                </div>
               </motion.div>
             ))}
           </div>

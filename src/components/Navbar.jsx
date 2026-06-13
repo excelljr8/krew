@@ -26,14 +26,15 @@ export default function Navbar() {
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className="fixed inset-x-0 top-0 z-50 transition-all duration-300"
       style={solid ? {
-        background: 'rgba(3,7,18,0.88)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: '1px solid var(--b1)',
+        background: 'rgba(3,7,18,0.9)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        borderBottom: '1px solid rgba(255,255,255,0.07)',
+        boxShadow: '0 1px 0 0 rgba(99,102,241,0.06)',
       } : {
-        background: 'rgba(3,7,18,0.4)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
+        background: 'transparent',
+        backdropFilter: 'blur(0px)',
+        WebkitBackdropFilter: 'blur(0px)',
       }}
     >
       {/* Desktop */}
@@ -55,7 +56,7 @@ export default function Navbar() {
         </Link>
 
         <nav className="flex items-center justify-center gap-8">
-          {[['Agentes', '/agents'], ['Precios', '/pricing']].map(([label, to]) => (
+          {[['Agentes', '/agents'], ['Precios', '/pricing'], ['Agendar', '/book']].map(([label, to]) => (
             <Link
               key={to}
               to={to}

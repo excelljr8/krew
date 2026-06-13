@@ -94,25 +94,25 @@ export default function Hero() {
 
           {/* Headline */}
           <motion.h1 {...rise(0.12)} className="display font-extrabold" style={{
-            fontSize: 'clamp(48px, 6vw, 96px)',
-            letterSpacing: '-0.03em', lineHeight: 1, marginBottom: '24px',
+            fontSize: 'clamp(52px, 7vw, 104px)',
+            letterSpacing: '-0.04em', lineHeight: 0.95, marginBottom: '28px',
           }}>
-            <span style={{ color: '#F1F5F9' }}>Tu próximo<br />empleado no<br /></span>
+            <span style={{ color: '#F1F5F9' }}>Tu próximo<br />empleado<br />no es </span>
             <span style={{
-              background: 'linear-gradient(135deg, #818CF8 0%, #6366F1 50%, #22D3EE 100%)',
+              background: 'linear-gradient(135deg, #818CF8 0%, #6366F1 45%, #22D3EE 100%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
             }}>
-              es humano.
+              humano.
             </span>
           </motion.h1>
 
           {/* Subtitle */}
           <motion.p {...rise(0.2)} style={{
             fontSize: '17px', lineHeight: '1.7', marginBottom: '40px',
-            maxWidth: '420px', color: '#64748B', fontWeight: 400,
+            maxWidth: '400px', color: '#64748B', fontWeight: 400,
           }}>
             Agentes de IA con roles reales — ventas, soporte, recepción, operaciones.
-            Instalados en tu negocio en días.
+            Activos en tu negocio en menos de 7 días.
           </motion.p>
 
           {/* CTAs */}
@@ -171,7 +171,7 @@ export default function Hero() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className="hidden lg:block"
-          style={{ flex: '0 0 390px', width: '390px' }}
+          style={{ flex: '0 0 420px', width: '420px' }}
         >
           <div style={{
             background: '#0b1220',
